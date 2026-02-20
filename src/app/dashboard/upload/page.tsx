@@ -1,0 +1,288 @@
+"use client";
+
+import { useState, useCallback } from "react";
+import { DropZone } from "@/components/upload/DropZone";
+import { PasswordInput } from "@/components/upload/PasswordInput";
+import { ParsingProgress } from "@/components/upload/ParsingProgress";
+import { TransactionPreview } from "@/components/upload/TransactionPreview";
+import { extractTextFromPDF, PDFExtractionError } from "@/lib/pdf/extractor";
+import { parseTransactions } from "@/lib/pdf/parser-registry";
+import type {
+  ParsedTransaction,
+  ParserResult,
+  ParsingProgress as ProgressType,
+} from "@/lib/pdf/types";
+
+type UploadStep = "upload" | "parsing" | "preview" | "success";
+
+export default function UploadPage() {
+  const [step, setStep] = useState<UploadStep>("upload");
+  const [file, setFile] = useState<File | null>(null);
+  const [password, setPassword] = useState("");
+  const [progress, setProgress] = useState<ProgressType>({
+    stage: "idle",
+    message: "",
+    percent: 0,
+  });
+  const [parserResult, setParserResult] = useState<ParserResult | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [savedCount, setSavedCount] = useState(0);
+
+  const handleFileSelected = useCallback((selectedFile: File) => {
+    setFile(selectedFile);
+    setError(null);
+  }, []);
+
+  const handleParse = useCallback(async () => {
+    if (!file) return;
+
+    setStep("parsing");
+    setError(null);
+
+    try {
+      // Extract text from PDF
+      const textLines = await extractTextFromPDF(file, password, setProgress);
+
+      // Parse transactions
+      setProgress({
+        stage: "parsing",
+        message: "Identifying bank and parsing transactions...",
+        percent: 85,
+      });
+
+      const result = parseTransactions(textLines);
+
+      setProgress({
+        stage: "done",
+        message: `Found ${result.transactions.length} transactions`,
+        percent: 100,
+      });
+
+      setParserResult(result);
+
+      if (result.success && result.transactions.length > 0) {
+        // Short delay to show completion before transitioning
+        setTimeout(() => setStep("preview"), 600);
+      } else {
+        setError(
+          result.errors[0]?.reason ||
+            "No transactions found in this statement.",
+        );
+        setStep("upload");
+      }
+    } catch (err) {
+      const message =
+        err instanceof PDFExtractionError
+          ? err.message
+          : "An unexpected error occurred while parsing the PDF.";
+      setError(message);
+      setProgress({
+        stage: "error",
+        message,
+        percent: 0,
+      });
+      setStep("upload");
+    }
+  }, [file, password]);
+
+  const handleConfirm = useCallback(async (selected: ParsedTransaction[]) => {
+    setIsSubmitting(true);
+
+    try {
+      // Phase 3 will implement the API. For now, simulate a save.
+      await new Promise((resolve) => setTimeout(resolve, 800));
+
+      setSavedCount(selected.length);
+      setStep("success");
+    } catch {
+      setError("Failed to save transactions. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  }, []);
+
+  const handleReset = useCallback(() => {
+    setStep("upload");
+    setFile(null);
+    setPassword("");
+    setProgress({ stage: "idle", message: "", percent: 0 });
+    setParserResult(null);
+    setError(null);
+    setIsSubmitting(false);
+    setSavedCount(0);
+  }, []);
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div>
+        <h1 className="text-2xl font-bold text-text-primary">
+          Upload Statement
+        </h1>
+        <p className="text-sm text-text-secondary mt-1">
+          Parse your bank statement PDF to extract transactions
+        </p>
+      </div>
+
+      {/* Step: Upload */}
+      {step === "upload" && (
+        <div className="space-y-5">
+          <DropZone onFileSelected={handleFileSelected} />
+
+          {file && (
+            <div className="space-y-4">
+              {/* Selected file badge */}
+              <div className="flex items-center gap-3 p-3 rounded-lg bg-surface border border-border">
+                <div className="w-9 h-9 rounded-lg bg-primary-light flex items-center justify-center shrink-0">
+                  <svg
+                    className="w-4 h-4 text-primary"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={1.5}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"
+                    />
+                  </svg>
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-medium text-text-primary truncate">
+                    {file.name}
+                  </p>
+                  <p className="text-xs text-text-muted">
+                    {(file.size / 1024).toFixed(0)} KB
+                  </p>
+                </div>
+                <button
+                  onClick={() => setFile(null)}
+                  className="text-text-muted hover:text-debit transition-colors cursor-pointer p-1"
+                  aria-label="Remove file"
+                >
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+              </div>
+
+              <PasswordInput value={password} onChange={setPassword} />
+
+              <button
+                onClick={handleParse}
+                className="w-full h-11 bg-primary hover:bg-primary-hover text-white font-medium rounded-lg text-sm transition-colors flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+                  />
+                </svg>
+                Parse Statement
+              </button>
+            </div>
+          )}
+
+          {error && (
+            <div className="p-3 rounded-lg bg-debit/10 border border-debit/20 text-sm text-debit">
+              {error}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Step: Parsing */}
+      {step === "parsing" && <ParsingProgress progress={progress} />}
+
+      {/* Step: Preview */}
+      {step === "preview" && parserResult && (
+        <div className="space-y-4">
+          {/* Bank info */}
+          <div className="flex flex-wrap items-center gap-3 text-xs text-text-muted">
+            <span className="px-2 py-1 rounded bg-primary-light text-primary font-medium">
+              {parserResult.bank}
+            </span>
+            {parserResult.accountNumber && (
+              <span>Account: {parserResult.accountNumber}</span>
+            )}
+            {parserResult.statementPeriod && (
+              <span>
+                {parserResult.statementPeriod.from} →{" "}
+                {parserResult.statementPeriod.to}
+              </span>
+            )}
+          </div>
+
+          <TransactionPreview
+            transactions={parserResult.transactions}
+            errorCount={parserResult.errors.length}
+            onConfirm={handleConfirm}
+            onCancel={handleReset}
+            isSubmitting={isSubmitting}
+          />
+        </div>
+      )}
+
+      {/* Step: Success */}
+      {step === "success" && (
+        <div className="flex flex-col items-center justify-center py-12 text-center">
+          <div className="w-16 h-16 rounded-2xl bg-credit/10 flex items-center justify-center mb-4">
+            <svg
+              className="w-8 h-8 text-credit"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={1.5}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          </div>
+          <h2 className="text-lg font-semibold text-text-primary mb-1">
+            Transactions saved!
+          </h2>
+          <p className="text-sm text-text-secondary mb-6">
+            {savedCount} transaction{savedCount !== 1 ? "s" : ""} have been
+            added to your account.
+          </p>
+          <div className="flex gap-3">
+            <button
+              onClick={handleReset}
+              className="h-10 px-4 rounded-lg border border-border text-sm font-medium text-text-secondary hover:bg-background transition-colors cursor-pointer"
+            >
+              Upload Another
+            </button>
+            <a
+              href="/dashboard/transactions"
+              className="h-10 px-4 rounded-lg bg-primary hover:bg-primary-hover text-white text-sm font-medium transition-colors flex items-center cursor-pointer"
+            >
+              View Transactions
+            </a>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
