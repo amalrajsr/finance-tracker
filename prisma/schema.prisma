@@ -7,10 +7,54 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum TransactionType {
+  debit
+  credit
+}
+
 model User {
   id             String   @id @default(cuid())
   email          String   @unique
   hashedPassword String
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+
+  statements   Statement[]
+  transactions Transaction[]
+}
+
+model Statement {
+  id        String    @id @default(cuid())
+  userId    String
+  bank      String
+  fromDate  DateTime?
+  toDate    DateTime?
+  txnCount  Int
+  createdAt DateTime  @default(now())
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions Transaction[]
+
+  @@index([userId, createdAt])
+}
+
+model Transaction {
+  id          String          @id @default(cuid())
+  userId      String
+  statementId String
+  date        DateTime
+  description String
+  reference   String          @default("")
+  amount      Decimal         @db.Decimal(12, 2)
+  type        TransactionType
+  balance     Decimal         @db.Decimal(12, 2)
+  dedupHash   String          @unique
+  createdAt   DateTime        @default(now())
+
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  statement Statement @relation(fields: [statementId], references: [id], onDelete: Cascade)
+
+  @@index([userId, date(sort: Desc)])
+  @@index([userId, type, date(sort: Desc)])
+  @@index([statementId])
 }

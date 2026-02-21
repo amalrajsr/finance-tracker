@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { DropZone } from "@/components/upload/DropZone";
 import { PasswordInput } from "@/components/upload/PasswordInput";
 import { ParsingProgress } from "@/components/upload/ParsingProgress";
@@ -16,6 +17,7 @@ import type {
 type UploadStep = "upload" | "parsing" | "preview" | "success";
 
 export default function UploadPage() {
+  const router = useRouter();
   const [step, setStep] = useState<UploadStep>("upload");
   const [file, setFile] = useState<File | null>(null);
   const [password, setPassword] = useState("");
@@ -28,6 +30,17 @@ export default function UploadPage() {
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [savedCount, setSavedCount] = useState(0);
+  const [skippedCount, setSkippedCount] = useState(0);
+
+  // Auto-redirect to transactions page after success
+  useEffect(() => {
+    if (step === "success") {
+      const timer = setTimeout(() => {
+        router.push("/dashboard/transactions");
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [step, router]);
 
   const handleFileSelected = useCallback((selectedFile: File) => {
     setFile(selectedFile);
@@ -86,21 +99,56 @@ export default function UploadPage() {
     }
   }, [file, password]);
 
-  const handleConfirm = useCallback(async (selected: ParsedTransaction[]) => {
-    setIsSubmitting(true);
+  const handleConfirm = useCallback(
+    async (selected: ParsedTransaction[]) => {
+      if (!parserResult) return;
+      setIsSubmitting(true);
+      setError(null);
 
-    try {
-      // Phase 3 will implement the API. For now, simulate a save.
-      await new Promise((resolve) => setTimeout(resolve, 800));
+      try {
+        const res = await fetch("/api/transactions", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            bank: parserResult.bank,
+            statementPeriod: parserResult.statementPeriod,
+            transactions: selected.map((t) => ({
+              date: t.date,
+              description: t.description,
+              referenceNumber: t.referenceNumber,
+              amount: t.amount,
+              type: t.type,
+              balance: t.balance,
+            })),
+          }),
+        });
 
-      setSavedCount(selected.length);
-      setStep("success");
-    } catch {
-      setError("Failed to save transactions. Please try again.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  }, []);
+        if (!res.ok) {
+          const data = (await res.json().catch(() => ({}))) as {
+            error?: string;
+          };
+          throw new Error(data.error ?? "Failed to save transactions.");
+        }
+
+        const data = (await res.json()) as {
+          inserted: number;
+          skipped: number;
+        };
+        setSavedCount(data.inserted);
+        setSkippedCount(data.skipped);
+        setStep("success");
+      } catch (err) {
+        const message =
+          err instanceof Error
+            ? err.message
+            : "Failed to save transactions. Please try again.";
+        setError(message);
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    [parserResult],
+  );
 
   const handleReset = useCallback(() => {
     setStep("upload");
@@ -252,6 +300,7 @@ export default function UploadPage() {
               viewBox="0 0 24 24"
               stroke="currentColor"
               strokeWidth={1.5}
+              aria-hidden="true"
             >
               <path
                 strokeLinecap="round"
@@ -263,9 +312,22 @@ export default function UploadPage() {
           <h2 className="text-lg font-semibold text-text-primary mb-1">
             Transactions saved!
           </h2>
-          <p className="text-sm text-text-secondary mb-6">
-            {savedCount} transaction{savedCount !== 1 ? "s" : ""} have been
-            added to your account.
+          <p className="text-sm text-text-secondary mb-1">
+            <span className="font-semibold text-text-primary">
+              {savedCount}
+            </span>{" "}
+            transaction{savedCount !== 1 ? "s" : ""} added.
+            {skippedCount > 0 && (
+              <>
+                {" "}
+                <span className="text-text-muted">
+                  ({skippedCount} skipped as duplicates)
+                </span>
+              </>
+            )}
+          </p>
+          <p className="text-xs text-text-muted mb-6">
+            Redirecting you to transactions…
           </p>
           <div className="flex gap-3">
             <button
