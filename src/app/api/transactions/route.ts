@@ -4,6 +4,7 @@ import { z } from "zod";
 import type { Prisma } from "@prisma/client";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { categorize, UserRule } from "@/lib/categorization/engine";
 
 // ---------------------------------------------------------------------------
 // Schemas
@@ -68,22 +69,35 @@ export async function POST(req: NextRequest) {
 
   const { bank, statementPeriod, transactions } = parsed.data;
 
-  // Compute dedup hash for every incoming transaction
-  const withHashes = transactions.map((t) => ({
-    ...t,
-    hash: computeDedupHash(userId, t.date, t.amount, t.type, t.balance),
-  }));
+  // Fetch user categories and system categories mapping
+  const [userRulesData, categoriesData] = await Promise.all([
+    db.userCategoryRule.findMany({ where: { userId }, select: { keyword: true, categoryId: true } }),
+    db.category.findMany({ select: { slug: true, id: true } })
+  ]);
+  
+  const userRules: UserRule[] = userRulesData;
+  const slugToIdMap = new Map(categoriesData.map((c) => [c.slug, c.id]));
+
+  // Compute dedup hash and categorization for every incoming transaction
+  const withHashesAndCategories = transactions.map((t) => {
+    const categoryId = categorize(t.description, userRules, slugToIdMap);
+    return {
+      ...t,
+      hash: computeDedupHash(userId, t.date, t.amount, t.type, t.balance),
+      categoryId,
+    };
+  });
 
   // Find which hashes already exist in the DB for this user
-  const incomingHashes = withHashes.map((t) => t.hash);
+  const incomingHashes = withHashesAndCategories.map((t) => t.hash);
   const existing = await db.transaction.findMany({
     where: { userId, dedupHash: { in: incomingHashes } },
     select: { dedupHash: true },
   });
   const existingHashSet = new Set(existing.map((e) => e.dedupHash));
 
-  const toInsert = withHashes.filter((t) => !existingHashSet.has(t.hash));
-  const skipped = withHashes.length - toInsert.length;
+  const toInsert = withHashesAndCategories.filter((t) => !existingHashSet.has(t.hash));
+  const skipped = withHashesAndCategories.length - toInsert.length;
 
   try {
     const statementId = await db.$transaction(async (tx) => {
@@ -111,6 +125,8 @@ export async function POST(req: NextRequest) {
             type: t.type as "debit" | "credit",
             balance: t.balance,
             dedupHash: t.hash,
+            categoryId: t.categoryId,
+            manualCategory: false,
           })),
           // Safety net for race conditions — unique constraint handles it at DB level
           skipDuplicates: true,
@@ -148,6 +164,7 @@ export async function GET(req: NextRequest) {
   const to = searchParams.get("to");
   const typeParam = searchParams.get("type");
   const search = searchParams.get("search")?.trim();
+  const categoryParam = searchParams.get("category");
 
   const where: Prisma.TransactionWhereInput = {
     userId,
@@ -164,6 +181,11 @@ export async function GET(req: NextRequest) {
       : {}),
     ...(search
       ? { description: { contains: search, mode: "insensitive" } }
+      : {}),
+    ...(categoryParam 
+      ? categoryParam === "uncategorized" 
+        ? { categoryId: null } 
+        : { category: { slug: categoryParam } }
       : {}),
   };
 
@@ -182,6 +204,15 @@ export async function GET(req: NextRequest) {
         type: true,
         balance: true,
         createdAt: true,
+        categoryId: true,
+        category: {
+          select: {
+            slug: true,
+            name: true,
+            colour: true,
+            icon: true,
+          }
+        }
       },
     }),
     db.transaction.count({ where }),
@@ -194,6 +225,11 @@ export async function GET(req: NextRequest) {
       balance: t.balance.toString(),
       date: t.date.toISOString(),
       createdAt: t.createdAt.toISOString(),
+      categorySlug: t.category?.slug,
+      categoryName: t.category?.name,
+      categoryColour: t.category?.colour,
+      categoryIcon: t.category?.icon,
+      category: undefined, // remove nested object
     })),
     total,
     page,

@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# fn-tracker
 
-## Getting Started
+A privacy-first expense tracker. You upload bank statement PDFs; the app extracts transactions in your browser and stores only the transaction data. No bank links, no raw PDFs stored.
 
-First, run the development server:
+## What it does
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Sign up and sign in with email and password
+- Upload password-protected bank statement PDFs
+- Parse PDFs in the browser (client-side only)
+- Preview transactions, then save them to your account
+- View and filter transactions on a dashboard
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The server never sees your PDF or its password. Only the structured transaction rows you confirm are saved.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Tech
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Next.js (App Router), React, TypeScript
+- PostgreSQL with Prisma
+- NextAuth for auth
+- pdfjs-dist for client-side PDF parsing
+- Tailwind CSS
 
-## Learn More
+## Setup
 
-To learn more about Next.js, take a look at the following resources:
+1. Clone the repo and install dependencies:
+  ```bash
+   npm install
+  ```
+2. Use a PostgreSQL database and set environment variables. Create a `.env` file in the project root with:
+  - `DATABASE_URL` – your PostgreSQL connection string
+  - `AUTH_SECRET` – a random string for session encryption (e.g. `openssl rand -base64 32`)
+  - `AUTH_URL` – in development, `http://localhost:3000`
+3. Run migrations:
+  ```bash
+   npx prisma migrate dev
+  ```
+4. Start the dev server:
+  ```bash
+   npm run dev
+  ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Open [http://localhost:3000](http://localhost:3000). You’ll be redirected to login or the dashboard if already signed in.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Scripts
 
-## Deploy on Vercel
+- `npm run dev` – development server
+- `npm run build` – production build
+- `npm run start` – run production build
+- `npm run lint` – run ESLint
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Project outline
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `src/app` – routes (login, signup, dashboard, upload, transactions)
+- `src/components` – upload flow, transaction list, layout
+- `src/lib` – auth, DB client, PDF parsing (including bank-specific parsers)
+- `prisma` – schema and migrations
+

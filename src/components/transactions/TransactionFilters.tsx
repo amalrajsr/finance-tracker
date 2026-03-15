@@ -3,7 +3,11 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useState } from "react";
 
-export function TransactionFilters() {
+export function TransactionFilters({
+  categories,
+}: {
+  categories: { id: string; name: string; slug: string }[];
+}) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -11,12 +15,14 @@ export function TransactionFilters() {
   const [type, setType] = useState(searchParams.get("type") ?? "");
   const [from, setFrom] = useState(searchParams.get("from") ?? "");
   const [to, setTo] = useState(searchParams.get("to") ?? "");
+  const [category, setCategory] = useState(searchParams.get("category") ?? "");
 
   const hasActiveFilters =
     !!searchParams.get("search") ||
     !!searchParams.get("type") ||
     !!searchParams.get("from") ||
-    !!searchParams.get("to");
+    !!searchParams.get("to") ||
+    !!searchParams.get("category");
 
   const applyFilters = useCallback(() => {
     const params = new URLSearchParams();
@@ -24,6 +30,7 @@ export function TransactionFilters() {
     if (type) params.set("type", type);
     if (from) params.set("from", from);
     if (to) params.set("to", to);
+    if (category) params.set("category", category);
     // Reset to page 1 when filters change
     router.push(`/dashboard/transactions?${params.toString()}`);
   }, [router, search, type, from, to]);
@@ -33,6 +40,7 @@ export function TransactionFilters() {
     setType("");
     setFrom("");
     setTo("");
+    setCategory("");
     router.push("/dashboard/transactions");
   }, [router]);
 
@@ -77,6 +85,30 @@ export function TransactionFilters() {
             <option value="">All</option>
             <option value="debit">Debit</option>
             <option value="credit">Credit</option>
+          </select>
+        </div>
+
+        {/* Category filter */}
+        <div className="sm:w-48">
+          <label
+            htmlFor="txn-category"
+            className="block text-xs font-medium text-text-secondary mb-1"
+          >
+            Category
+          </label>
+          <select
+            id="txn-category"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="w-full h-9 px-3 rounded-lg border border-border bg-background text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition"
+          >
+            <option value="">All Categories</option>
+            <option value="uncategorized">Uncategorized</option>
+            {categories.map((c) => (
+              <option key={c.id} value={c.slug}>
+                {c.name}
+              </option>
+            ))}
           </select>
         </div>
       </div>
