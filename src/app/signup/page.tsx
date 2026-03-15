@@ -1,66 +1,44 @@
 "use client";
 
 import { useState } from "react";
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useSignup } from "./_services/use-signup";
 
 export default function SignupPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [validationError, setValidationError] = useState("");
+  const {
+    mutateAsync: signup,
+    isPending: isLoading,
+    error: mutationError,
+  } = useSignup();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setError("");
+    setValidationError("");
 
     if (password !== confirmPassword) {
-      setError("Passwords do not match");
+      setValidationError("Passwords do not match");
       return;
     }
 
     if (password.length < 6) {
-      setError("Password must be at least 6 characters");
+      setValidationError("Password must be at least 6 characters");
       return;
     }
 
-    setIsLoading(true);
-
     try {
-      const res = await fetch("/api/auth/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.error || "Failed to create account");
-        return;
-      }
-
-      // Auto sign-in after successful signup
-      const result = await signIn("credentials", {
-        email,
-        password,
-        redirect: false,
-      });
-
-      if (result?.error) {
-        // Account created but sign-in failed — redirect to login
+      await signup({ email, password });
+      router.push("/dashboard");
+      router.refresh();
+    } catch (err) {
+      if (err instanceof Error && err.message.includes("login manually")) {
         router.push("/login");
-      } else {
-        router.push("/dashboard");
-        router.refresh();
       }
-    } catch {
-      setError("Something went wrong. Please try again.");
-    } finally {
-      setIsLoading(false);
     }
   }
 
@@ -94,9 +72,12 @@ export default function SignupPage() {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
-          {error && (
+          {(validationError || mutationError) && (
             <div className="bg-debit-light text-debit text-sm px-4 py-3 rounded-lg">
-              {error}
+              {validationError ||
+                (mutationError instanceof Error
+                  ? mutationError.message
+                  : "Something went wrong. Please try again.")}
             </div>
           )}
 

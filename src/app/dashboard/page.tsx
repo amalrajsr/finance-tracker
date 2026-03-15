@@ -3,8 +3,12 @@ import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { getAnalyticsSummary } from "@/lib/analytics";
 import { formatCurrency } from "@/lib/format";
-import { BackfillBanner } from "@/components/transactions/BackfillBanner";
-import { MonthlyTrendChart, CategoryBreakdownChart, DailySpendingChart } from "@/components/analytics/Charts";
+import { BackfillBanner } from "./_components/BackfillBanner";
+import {
+  MonthlyTrendChart,
+  CategoryBreakdownChart,
+  DailySpendingChart,
+} from "./_components/Charts";
 
 // ---------------------------------------------------------------------------
 // Stats helper
@@ -13,7 +17,15 @@ import { MonthlyTrendChart, CategoryBreakdownChart, DailySpendingChart } from "@
 async function getDashboardStats(userId: string) {
   const now = new Date();
   const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-  const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+  const endOfMonth = new Date(
+    now.getFullYear(),
+    now.getMonth() + 1,
+    0,
+    23,
+    59,
+    59,
+    999,
+  );
 
   const [txnCount, stmtCount, monthlyGrouped] = await Promise.all([
     db.transaction.count({ where: { userId } }),
@@ -45,14 +57,17 @@ export default async function DashboardPage() {
   const session = await auth();
   const userId = session!.user!.id as string;
 
-  const [{ txnCount, stmtCount, monthlyDebit, monthlyCredit, netChange }, analytics, uncategorizedCount] =
-    await Promise.all([
-      getDashboardStats(userId),
-      getAnalyticsSummary(userId, 6),
-      db.transaction.count({
-        where: { userId, categoryId: null, manualCategory: false },
-      }),
-    ]);
+  const [
+    { txnCount, stmtCount, monthlyDebit, monthlyCredit, netChange },
+    analytics,
+    uncategorizedCount,
+  ] = await Promise.all([
+    getDashboardStats(userId),
+    getAnalyticsSummary(userId, 6),
+    db.transaction.count({
+      where: { userId, categoryId: null, manualCategory: false },
+    }),
+  ]);
 
   const hasData = txnCount > 0;
   const now = new Date();
@@ -170,41 +185,62 @@ export default async function DashboardPage() {
           {/* Analytics Charts */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className="p-5 rounded-xl border border-border bg-surface shadow-sm">
-              <h3 className="text-sm font-semibold text-text-primary mb-4"> इनकम/Expense Trend (6 Months)</h3>
+              <h3 className="text-sm font-semibold text-text-primary mb-4">
+                Income/Expense Trend (6 Months)
+              </h3>
               <MonthlyTrendChart data={analytics.monthlyTrend} />
             </div>
-            
+
             <div className="p-5 rounded-xl border border-border bg-surface shadow-sm">
-              <h3 className="text-sm font-semibold text-text-primary mb-4"> Category Breakdown</h3>
+              <h3 className="text-sm font-semibold text-text-primary mb-4">
+                Category Breakdown
+              </h3>
               <CategoryBreakdownChart data={analytics.categoryBreakdown} />
             </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className="p-5 rounded-xl border border-border bg-surface shadow-sm">
-              <h3 className="text-sm font-semibold text-text-primary mb-4"> Top Spending Destinations</h3>
+              <h3 className="text-sm font-semibold text-text-primary mb-4">
+                Top Spending Destinations
+              </h3>
               {analytics.topMerchants.length > 0 ? (
                 <ul className="divide-y divide-border">
                   {analytics.topMerchants.map((m: any, i: number) => (
-                    <li key={m.merchant} className="py-3 flex items-center justify-between text-sm">
+                    <li
+                      key={m.merchant}
+                      className="py-3 flex items-center justify-between text-sm"
+                    >
                       <div className="flex items-center gap-3">
-                        <span className="font-mono text-text-muted text-xs">#{i + 1}</span>
-                        <span className="font-medium text-text-primary">{m.merchant}</span>
+                        <span className="font-mono text-text-muted text-xs">
+                          #{i + 1}
+                        </span>
+                        <span className="font-medium text-text-primary">
+                          {m.merchant}
+                        </span>
                       </div>
                       <div className="text-right">
-                        <span className="font-semibold text-text-primary">₹{parseFloat(m.total).toLocaleString("en-IN")}</span>
-                        <span className="text-xs text-text-muted block">{m.count} txns</span>
+                        <span className="font-semibold text-text-primary">
+                          ₹{parseFloat(m.total).toLocaleString("en-IN")}
+                        </span>
+                        <span className="text-xs text-text-muted block">
+                          {m.count} txns
+                        </span>
                       </div>
                     </li>
                   ))}
                 </ul>
               ) : (
-                <p className="text-sm text-text-muted text-center py-6">No merchant data.</p>
+                <p className="text-sm text-text-muted text-center py-6">
+                  No merchant data.
+                </p>
               )}
             </div>
 
             <div className="p-5 rounded-xl border border-border bg-surface shadow-sm">
-              <h3 className="text-sm font-semibold text-text-primary mb-4"> Daily Spending (Last 30 Days)</h3>
+              <h3 className="text-sm font-semibold text-text-primary mb-4">
+                Daily Spending (Last 30 Days)
+              </h3>
               <DailySpendingChart data={analytics.dailyHeatmap} />
             </div>
           </div>

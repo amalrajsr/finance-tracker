@@ -2,10 +2,10 @@
 
 import { useState, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { DropZone } from "@/components/upload/DropZone";
-import { PasswordInput } from "@/components/upload/PasswordInput";
-import { ParsingProgress } from "@/components/upload/ParsingProgress";
-import { TransactionPreview } from "@/components/upload/TransactionPreview";
+import { DropZone } from "./_components/DropZone";
+import { PasswordInput } from "./_components/PasswordInput";
+import { ParsingProgress } from "./_components/ParsingProgress";
+import { TransactionPreview } from "./_components/TransactionPreview";
 import { extractTextFromPDF, PDFExtractionError } from "@/lib/pdf/extractor";
 import { parseTransactions } from "@/lib/pdf/parser-registry";
 import type {
