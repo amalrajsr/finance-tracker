@@ -1,6 +1,7 @@
 import { formatCurrency, formatDate } from "@/lib/format";
 import { CategorySelect } from "./CategorySelect";
 import { SerializedTransaction } from "../types";
+import { ManualTransactionActions } from "./ManualTransactionActions";
 
 export function MobileCard({ txn }: { txn: SerializedTransaction }) {
   const isDebit = txn.type === "debit";
@@ -47,9 +48,12 @@ export function MobileCard({ txn }: { txn: SerializedTransaction }) {
         >
           {isDebit ? "−" : "+"}{formatCurrency(txn.amount)}
         </p>
-        <p className="text-xs text-text-muted mt-0.5">
-          Bal {formatCurrency(txn.balance)}
-        </p>
+        <div className="flex flex-col items-end gap-1 mt-0.5">
+          <p className="text-xs text-text-muted">
+            Bal {formatCurrency(txn.balance)}
+          </p>
+          {txn.isManual && <ManualTransactionActions txn={txn} />}
+        </div>
       </div>
     </li>
   );

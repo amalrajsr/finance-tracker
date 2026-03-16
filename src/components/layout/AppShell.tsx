@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ToastProvider } from "@/hooks/use-toast";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { useState } from "react";
@@ -122,8 +123,11 @@ export function AppShell({ children, userEmail }: AppShellProps) {
     return pathname.startsWith(href);
   }
 
+
+
   return (
-    <div className="min-h-screen bg-background">
+    <ToastProvider>
+    <div className="min-h-screen bg-background w-full ">
       {/* Desktop Sidebar */}
       <aside
         className={`hidden md:flex fixed left-0 top-0 h-screen flex-col border-r border-border bg-surface z-40 transition-all duration-200 ${
@@ -208,7 +212,7 @@ export function AppShell({ children, userEmail }: AppShellProps) {
           sidebarExpanded ? "md:ml-56" : "md:ml-16"
         }`}
       >
-        <div className="max-w-5xl mx-auto p-4 md:p-8">{children}</div>
+        <div className="max-w-7xl mx-auto p-4 md:p-8">{children}</div>
       </main>
 
       {/* Mobile Bottom Nav */}
@@ -227,5 +231,6 @@ export function AppShell({ children, userEmail }: AppShellProps) {
         ))}
       </nav>
     </div>
+    </ToastProvider>
   );
 }

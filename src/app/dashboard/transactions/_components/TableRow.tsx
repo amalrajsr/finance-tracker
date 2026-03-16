@@ -1,6 +1,7 @@
 import { formatCurrency, formatDate } from "@/lib/format";
 import { CategorySelect } from "./CategorySelect";
 import { SerializedTransaction } from "../types";
+import { ManualTransactionActions } from "./ManualTransactionActions";
 
 export function TableRow({ txn }: { txn: SerializedTransaction }) {
   const isDebit = txn.type === "debit";
@@ -54,8 +55,11 @@ export function TableRow({ txn }: { txn: SerializedTransaction }) {
           <span className="text-text-muted">—</span>
         )}
       </td>
-      <td className="px-4 py-3 text-sm text-right text-text-secondary whitespace-nowrap">
-        {formatCurrency(txn.balance)}
+      <td className="px-4 py-3 text-sm text-right text-text-secondary whitespace-nowrap group">
+        <div className="flex items-center justify-end gap-3">
+          <span>{formatCurrency(txn.balance)}</span>
+          {txn.isManual && <ManualTransactionActions txn={txn} />}
+        </div>
       </td>
     </tr>
   );

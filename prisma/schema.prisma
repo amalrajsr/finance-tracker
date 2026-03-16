@@ -42,7 +42,7 @@ model Statement {
 model Transaction {
   id          String          @id @default(cuid())
   userId      String
-  statementId String
+  statementId String?
   date        DateTime
   description String
   reference   String          @default("")
@@ -52,10 +52,11 @@ model Transaction {
   dedupHash   String          @unique
   categoryId  String?
   manualCategory Boolean      @default(false)
+  isManual    Boolean         @default(false)
   createdAt   DateTime        @default(now())
 
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  statement Statement @relation(fields: [statementId], references: [id], onDelete: Cascade)
+  statement Statement? @relation(fields: [statementId], references: [id], onDelete: Cascade)
   category  Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
 
   @@index([userId, date(sort: Desc)])

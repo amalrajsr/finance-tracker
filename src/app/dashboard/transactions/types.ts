@@ -13,5 +13,6 @@ export type SerializedTransaction = {
   categoryIcon?: string;
   categoryColour?: string;
   manualCategory: boolean;
+  isManual: boolean;
   categories: CategoryOption[];
 };
