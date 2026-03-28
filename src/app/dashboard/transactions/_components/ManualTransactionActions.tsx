@@ -38,7 +38,7 @@ export function ManualTransactionActions({ txn }: ComponentProps) {
         <button 
           onClick={handleDelete} 
           disabled={isLoading}
-          className="text-xs font-medium text-red-500 hover:text-red-700 disabled:opacity-50 cursor-pointer"
+          className="text-xs font-medium text-error hover:text-error/80 disabled:opacity-50 cursor-pointer p-2"
         >
           Yes
         </button>
@@ -57,7 +57,7 @@ export function ManualTransactionActions({ txn }: ComponentProps) {
     <div className="flex items-center gap-1 justify-end  group-hover:opacity-100 transition-opacity">
       <button
         onClick={() => setIsEditOpen(true)}
-        className="p-1.5 text-text-muted hover:text-primary transition-colors cursor-pointer focus:outline-none"
+        className="p-2.5 text-text-muted hover:text-primary transition-colors cursor-pointer focus:outline-none rounded-lg"
         title="Edit Transaction"
       >
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -67,7 +67,7 @@ export function ManualTransactionActions({ txn }: ComponentProps) {
 
       <button
         onClick={() => setIsDeleting(true)}
-        className="p-1.5 text-text-muted hover:text-red-500 transition-colors cursor-pointer focus:outline-none"
+        className="p-2.5 text-text-muted hover:text-error transition-colors cursor-pointer focus:outline-none rounded-lg"
         title="Delete Transaction"
       >
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>

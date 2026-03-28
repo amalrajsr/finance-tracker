@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   BarChart,
   Bar,
@@ -15,10 +15,23 @@ import {
   Legend,
 } from "recharts";
 
-// ---------------------------------------------------------------------------
-// Formatter
-// ---------------------------------------------------------------------------
 const formatCurrency = (val: number) => `₹${val.toLocaleString("en-IN")}`;
+
+const THEME_CREDIT = "#059669";
+const THEME_DEBIT = "#e11d48";
+const THEME_PRIMARY = "#4f46e5";
+
+function useIsMobile(breakpoint = 640) {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const mql = window.matchMedia(`(max-width: ${breakpoint}px)`);
+    setIsMobile(mql.matches);
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mql.addEventListener("change", handler);
+    return () => mql.removeEventListener("change", handler);
+  }, [breakpoint]);
+  return isMobile;
+}
 
 // ---------------------------------------------------------------------------
 // 1. Monthly Trend Chart (Bar Chart)
@@ -52,8 +65,8 @@ export function MonthlyTrendChart({ data }: { data: any[] }) {
             contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
           />
           <Legend iconType="circle" wrapperStyle={{ fontSize: 12, paddingTop: '10px' }} />
-          <Bar dataKey="credits" name="Income" fill="#34D399" radius={[4, 4, 0, 0]} maxBarSize={40} />
-          <Bar dataKey="debits" name="Expenses" fill="#EF4444" radius={[4, 4, 0, 0]} maxBarSize={40} />
+          <Bar dataKey="credits" name="Income" fill={THEME_CREDIT} radius={[4, 4, 0, 0]} maxBarSize={40} />
+          <Bar dataKey="debits" name="Expenses" fill={THEME_DEBIT} radius={[4, 4, 0, 0]} maxBarSize={40} />
         </BarChart>
       </ResponsiveContainer>
     </div>
@@ -64,6 +77,8 @@ export function MonthlyTrendChart({ data }: { data: any[] }) {
 // 2. Category Breakdown Chart (Donut Chart)
 // ---------------------------------------------------------------------------
 export function CategoryBreakdownChart({ data }: { data: any[] }) {
+  const isMobile = useIsMobile();
+
   if (!data || data.length === 0) {
     return <div className="text-sm text-text-muted text-center py-10">No category data available</div>;
   }
@@ -80,15 +95,15 @@ export function CategoryBreakdownChart({ data }: { data: any[] }) {
   }
 
   return (
-    <div className="h-72 w-full font-sans relative">
+    <div className={`w-full font-sans relative ${isMobile ? "h-80" : "h-72"}`}>
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
           <Pie
             data={chartData}
             cx="50%"
-            cy="50%"
-            innerRadius={60}
-            outerRadius={90}
+            cy={isMobile ? "40%" : "50%"}
+            innerRadius={isMobile ? 50 : 60}
+            outerRadius={isMobile ? 75 : 90}
             paddingAngle={2}
             dataKey="value"
             stroke="none"
@@ -101,7 +116,13 @@ export function CategoryBreakdownChart({ data }: { data: any[] }) {
             formatter={(value: number) => formatCurrency(value)}
             contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
           />
-          <Legend layout="vertical" verticalAlign="middle" align="right" iconType="circle" wrapperStyle={{ fontSize: 12 }} />
+          <Legend
+            layout={isMobile ? "horizontal" : "vertical"}
+            verticalAlign={isMobile ? "bottom" : "middle"}
+            align={isMobile ? "center" : "right"}
+            iconType="circle"
+            wrapperStyle={{ fontSize: 12 }}
+          />
         </PieChart>
       </ResponsiveContainer>
     </div>
@@ -134,7 +155,7 @@ export function DailySpendingChart({ data }: { data: any[] }) {
             contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)', fontSize: '12px' }}
             cursor={{ fill: '#F3F4F6' }}
           />
-          <Bar dataKey="amount" name="Spent" fill="#6366F1" radius={[2, 2, 0, 0]} />
+          <Bar dataKey="amount" name="Spent" fill={THEME_PRIMARY} radius={[2, 2, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
     </div>

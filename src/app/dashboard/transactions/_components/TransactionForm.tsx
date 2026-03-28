@@ -6,6 +6,9 @@ import { transactionFormSchema, TransactionFormValues } from "../_utils/transact
 import { CategoryOption } from "./CategorySelect";
 import { CategoryDropdown } from "./CategoryDropdown";
 import { useToast } from "@/hooks/use-toast";
+import { Input } from "@/components/ui/input";
+import { Select } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 
 interface TransactionFormProps {
   mode: "create" | "edit";
@@ -35,7 +38,6 @@ export function TransactionForm({ mode, initialValues, categories, onSuccess, on
     setErrors({});
     setApiError("");
 
-    // Convert amount to number if it's currently a string from the input
     const payload = {
       ...formData,
       amount: formData.amount ? Number(formData.amount) : undefined,
@@ -66,49 +68,57 @@ export function TransactionForm({ mode, initialValues, categories, onSuccess, on
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {apiError && (
-        <div className="p-3 text-sm text-red-600 bg-red-50 border border-red-100 rounded-lg">
+        <div className="p-3 text-sm text-error bg-error-light border border-error/20 rounded-lg">
           {apiError}
         </div>
       )}
       
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-xs font-medium text-text-secondary mb-1">Amount</label>
-          <input
+          <label htmlFor="txn-amount" className="block text-xs font-medium text-text-secondary mb-1">Amount</label>
+          <Input
+            id="txn-amount"
             type="number"
             step="0.01"
             value={formData.amount || ""}
             onChange={(e) => setFormData({ ...formData, amount: e.target.value ? Number(e.target.value) : undefined })}
-            className={`w-full px-3 py-2 border rounded-lg text-sm bg-background focus:outline-none focus:ring-1 ${errors.amount ? "border-red-500 ring-red-500" : "border-border focus:ring-primary"}`}
+            error={!!errors.amount}
+            errorId={errors.amount ? "txn-amount-error" : undefined}
             placeholder="0.00"
+            inputSize="md"
           />
-          {errors.amount && <p className="text-xs text-red-500 mt-1">{errors.amount[0]}</p>}
+          {errors.amount && <p id="txn-amount-error" className="text-xs text-error mt-1">{errors.amount[0]}</p>}
         </div>
         
         <div>
-          <label className="block text-xs font-medium text-text-secondary mb-1">Date</label>
-          <input
+          <label htmlFor="txn-date" className="block text-xs font-medium text-text-secondary mb-1">Date</label>
+          <Input
+            id="txn-date"
             type="date"
             value={formData.date || ""}
             onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-            className={`w-full px-3 py-2 border rounded-lg text-sm bg-background focus:outline-none focus:ring-1 ${errors.date ? "border-red-500 ring-red-500" : "border-border focus:ring-primary"}`}
+            error={!!errors.date}
+            errorId={errors.date ? "txn-date-error" : undefined}
+            inputSize="md"
           />
-          {errors.date && <p className="text-xs text-red-500 mt-1">{errors.date[0]}</p>}
+          {errors.date && <p id="txn-date-error" className="text-xs text-error mt-1">{errors.date[0]}</p>}
         </div>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-xs font-medium text-text-secondary mb-1">Type</label>
-          <select
+          <label htmlFor="txn-type" className="block text-xs font-medium text-text-secondary mb-1">Type</label>
+          <Select
+            id="txn-type"
             value={formData.type}
             onChange={(e) => setFormData({ ...formData, type: e.target.value as "debit" | "credit" })}
-            className={`w-full px-3 py-2 border rounded-lg text-sm bg-background focus:outline-none focus:ring-1 ${errors.type ? "border-red-500 ring-red-500" : "border-border focus:ring-primary"}`}
+            error={!!errors.type}
+            selectSize="md"
           >
             <option value="debit">Debit (Expense)</option>
             <option value="credit">Credit (Income)</option>
-          </select>
-          {errors.type && <p className="text-xs text-red-500 mt-1">{errors.type[0]}</p>}
+          </Select>
+          {errors.type && <p className="text-xs text-error mt-1">{errors.type[0]}</p>}
         </div>
         
         <div>
@@ -122,36 +132,37 @@ export function TransactionForm({ mode, initialValues, categories, onSuccess, on
       </div>
 
       <div>
-        <label className="block text-xs font-medium text-text-secondary mb-1">Description / Merchant</label>
-        <input
+        <label htmlFor="txn-desc" className="block text-xs font-medium text-text-secondary mb-1">Description / Merchant</label>
+        <Input
+          id="txn-desc"
           type="text"
           value={formData.description || ""}
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-          className={`w-full px-3 py-2 border rounded-lg text-sm bg-background focus:outline-none focus:ring-1 ${errors.description ? "border-red-500 ring-red-500" : "border-border focus:ring-primary"}`}
+          error={!!errors.description}
+          errorId={errors.description ? "txn-desc-error" : undefined}
           placeholder="e.g. Swiggy, Salary, etc."
+          inputSize="md"
         />
-        {errors.description && <p className="text-xs text-red-500 mt-1">{errors.description[0]}</p>}
+        {errors.description && <p id="txn-desc-error" className="text-xs text-error mt-1">{errors.description[0]}</p>}
       </div>
 
       <div className="flex justify-end gap-3 pt-4 border-t border-border mt-6">
-        <button
+        <Button
           type="button"
           onClick={onCancel}
           disabled={isLoading}
-          className="px-4 py-2 text-sm font-medium text-text-secondary hover:text-text-primary transition-colors disabled:opacity-50 cursor-pointer focus:outline-none"
+          variant="ghost"
+          size="md"
         >
           Cancel
-        </button>
-        <button
+        </Button>
+        <Button
           type="submit"
-          disabled={isLoading}
-          className="px-4 py-2 text-sm font-medium bg-primary text-white rounded-lg hover:bg-primary-hover transition-colors disabled:opacity-50 flex items-center gap-2 cursor-pointer focus:outline-none"
+          loading={isLoading}
+          size="md"
         >
-          {isLoading ? (
-            <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-          ) : null}
           {mode === "create" ? "Save Transaction" : "Save Changes"}
-        </button>
+        </Button>
       </div>
     </form>
   );

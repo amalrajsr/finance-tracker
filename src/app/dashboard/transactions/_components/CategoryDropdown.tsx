@@ -56,7 +56,7 @@ export function CategoryDropdown({ value, onChange, categories }: CategoryDropdo
           <button
             type="button"
             onClick={() => { onChange(null); setIsOpen(false); }}
-            className="w-full px-3 py-2 text-sm text-left hover:bg-background transition-colors text-text-secondary"
+            className="w-full px-3 py-2.5 min-h-[44px] text-sm text-left hover:bg-background transition-colors text-text-secondary cursor-pointer"
           >
             Uncategorized
           </button>
@@ -65,7 +65,7 @@ export function CategoryDropdown({ value, onChange, categories }: CategoryDropdo
               key={cat.id}
               type="button"
               onClick={() => { onChange(cat.id); setIsOpen(false); }}
-              className="w-full px-3 py-2 text-left hover:bg-background transition-colors flex items-center justify-between"
+              className="w-full px-3 py-2.5 min-h-[44px] text-left hover:bg-background transition-colors flex items-center justify-between cursor-pointer"
             >
               <CategoryBadge {...cat} />
             </button>

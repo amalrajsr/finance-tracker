@@ -25,10 +25,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         const { email, password } = parsed.data;
 
+        const normalizedEmail = email.toLowerCase();
         const user = await db.user.findUnique({
-          where: { email: email.toLowerCase() },
+          where: { email: normalizedEmail },
         });
-
         if (!user) return null;
 
         const passwordMatch = await bcrypt.compare(
@@ -37,9 +37,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         );
         if (!passwordMatch) return null;
 
+        const row = user as Record<string, unknown>;
+        const displayName =
+          row.name === null || typeof row.name === "string"
+            ? row.name
+            : null;
+
         return {
           id: user.id,
           email: user.email,
+          name: displayName,
         };
       },
     }),
@@ -49,12 +56,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
+        token.name = user.name ?? null;
+        token.email = user.email;
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string;
+        session.user.name =
+          (token.name as string | null | undefined) ?? null;
+        if (token.email) {
+          session.user.email = token.email as string;
+        }
       }
       return session;
     },

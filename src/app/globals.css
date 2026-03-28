@@ -8,15 +8,20 @@
   --color-credit-light: #ecfdf5;
   --color-debit: #e11d48;
   --color-debit-light: #fff1f2;
+  --color-error: #dc2626;
+  --color-error-light: #fef2f2;
+  --color-success: #16a34a;
+  --color-success-light: #f0fdf4;
   --color-warning: #f59e0b;
+  --color-warning-light: #fffbeb;
   --color-surface: #ffffff;
   --color-background: #f8fafc;
   --color-border: #e2e8f0;
   --color-text-primary: #0f172a;
   --color-text-secondary: #64748b;
   --color-text-muted: #94a3b8;
-  --font-sans: "Inter", sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-sans: var(--font-inter, "Inter"), sans-serif;
+  --font-mono: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, monospace;
 }
 
 body {
@@ -25,4 +30,8 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.safe-area-pb {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }

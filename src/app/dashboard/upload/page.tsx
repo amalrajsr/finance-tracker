@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useCallback } from "react";
 import { DropZone } from "./_components/DropZone";
 import { PasswordInput } from "./_components/PasswordInput";
 import { ParsingProgress } from "./_components/ParsingProgress";
 import { TransactionPreview } from "./_components/TransactionPreview";
 import { extractTextFromPDF, PDFExtractionError } from "@/lib/pdf/extractor";
 import { parseTransactions } from "@/lib/pdf/parser-registry";
+import { Button } from "@/components/ui/button";
 import type {
   ParsedTransaction,
   ParserResult,
@@ -17,7 +17,6 @@ import type {
 type UploadStep = "upload" | "parsing" | "preview" | "success";
 
 export default function UploadPage() {
-  const router = useRouter();
   const [step, setStep] = useState<UploadStep>("upload");
   const [file, setFile] = useState<File | null>(null);
   const [password, setPassword] = useState("");
@@ -32,15 +31,7 @@ export default function UploadPage() {
   const [savedCount, setSavedCount] = useState(0);
   const [skippedCount, setSkippedCount] = useState(0);
 
-  // Auto-redirect to transactions page after success
-  useEffect(() => {
-    if (step === "success") {
-      const timer = setTimeout(() => {
-        router.push("/dashboard/transactions");
-      }, 2000);
-      return () => clearTimeout(timer);
-    }
-  }, [step, router]);
+  // No auto-redirect: let the user choose when to navigate
 
   const handleFileSelected = useCallback((selectedFile: File) => {
     setFile(selectedFile);
@@ -56,7 +47,6 @@ export default function UploadPage() {
     try {
       // Extract text from PDF
       const textLines = await extractTextFromPDF(file, password, setProgress);
-
       // Parse transactions
       setProgress({
         stage: "parsing",
@@ -161,6 +151,15 @@ export default function UploadPage() {
     setSavedCount(0);
   }, []);
 
+  const steps = [
+    { key: "upload", label: "Select File" },
+    { key: "parsing", label: "Parse" },
+    { key: "preview", label: "Review" },
+    { key: "success", label: "Done" },
+  ] as const;
+
+  const currentIdx = steps.findIndex((s) => s.key === step);
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -172,6 +171,43 @@ export default function UploadPage() {
           Parse your bank statement PDF to extract transactions
         </p>
       </div>
+
+      {/* Step indicator */}
+      <nav aria-label="Upload progress" className="flex items-center gap-1">
+        {steps.map((s, i) => (
+          <div key={s.key} className="flex items-center gap-1 flex-1 last:flex-initial">
+            <div className="flex items-center gap-2">
+              <div
+                className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0 transition-colors ${
+                  i < currentIdx
+                    ? "bg-primary text-white"
+                    : i === currentIdx
+                      ? "bg-primary text-white ring-2 ring-primary/30"
+                      : "bg-background text-text-muted border border-border"
+                }`}
+              >
+                {i < currentIdx ? (
+                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                  </svg>
+                ) : (
+                  i + 1
+                )}
+              </div>
+              <span className={`text-xs font-medium hidden sm:inline whitespace-nowrap ${
+                i <= currentIdx ? "text-text-primary" : "text-text-muted"
+              }`}>
+                {s.label}
+              </span>
+            </div>
+            {i < steps.length - 1 && (
+              <div className={`flex-1 h-px mx-1 ${
+                i < currentIdx ? "bg-primary" : "bg-border"
+              }`} />
+            )}
+          </div>
+        ))}
+      </nav>
 
       {/* Step: Upload */}
       {step === "upload" && (
@@ -207,7 +243,7 @@ export default function UploadPage() {
                 </div>
                 <button
                   onClick={() => setFile(null)}
-                  className="text-text-muted hover:text-debit transition-colors cursor-pointer p-1"
+                  className="text-text-muted hover:text-error transition-colors cursor-pointer p-2.5 rounded-lg"
                   aria-label="Remove file"
                 >
                   <svg
@@ -228,25 +264,28 @@ export default function UploadPage() {
 
               <PasswordInput value={password} onChange={setPassword} />
 
-              <button
+              <Button
                 onClick={handleParse}
-                className="w-full h-11 bg-primary hover:bg-primary-hover text-white font-medium rounded-lg text-sm transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                size="lg"
+                className="w-full"
+                icon={
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+                    />
+                  </svg>
+                }
               >
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-                  />
-                </svg>
                 Parse Statement
-              </button>
+              </Button>
             </div>
           )}
 
@@ -327,18 +366,15 @@ export default function UploadPage() {
             )}
           </p>
           <p className="text-xs text-text-muted mb-6">
-            Redirecting you to transactions…
+            Choose where to go next
           </p>
           <div className="flex gap-3">
-            <button
-              onClick={handleReset}
-              className="h-10 px-4 rounded-lg border border-border text-sm font-medium text-text-secondary hover:bg-background transition-colors cursor-pointer"
-            >
+            <Button onClick={handleReset} variant="secondary" size="md">
               Upload Another
-            </button>
+            </Button>
             <a
               href="/dashboard/transactions"
-              className="h-10 px-4 rounded-lg bg-primary hover:bg-primary-hover text-white text-sm font-medium transition-colors flex items-center cursor-pointer"
+              className="h-10 min-h-[44px] px-4 rounded-lg bg-primary hover:bg-primary-hover text-white text-sm font-medium transition-colors flex items-center cursor-pointer"
             >
               View Transactions
             </a>

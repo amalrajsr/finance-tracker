@@ -33,7 +33,7 @@ export function Pagination({
           <Link
             href={buildPageUrl(baseParams, page - 1)}
             aria-label="Previous page"
-            className="h-8 px-3 text-sm rounded-lg border border-border text-text-secondary hover:bg-background transition-colors flex items-center"
+            className="h-10 min-h-[44px] px-4 text-sm rounded-lg border border-border text-text-secondary hover:bg-background transition-colors flex items-center"
           >
             ← Prev
           </Link>
@@ -41,7 +41,7 @@ export function Pagination({
           <span
             aria-label="Previous page, disabled"
             aria-disabled="true"
-            className="h-8 px-3 text-sm rounded-lg border border-border text-text-muted opacity-40 flex items-center cursor-not-allowed"
+            className="h-10 min-h-[44px] px-4 text-sm rounded-lg border border-border text-text-muted opacity-40 flex items-center cursor-not-allowed"
           >
             ← Prev
           </span>
@@ -50,7 +50,7 @@ export function Pagination({
           <Link
             href={buildPageUrl(baseParams, page + 1)}
             aria-label="Next page"
-            className="h-8 px-3 text-sm rounded-lg border border-border text-text-secondary hover:bg-background transition-colors flex items-center"
+            className="h-10 min-h-[44px] px-4 text-sm rounded-lg border border-border text-text-secondary hover:bg-background transition-colors flex items-center"
           >
             Next →
           </Link>
@@ -58,7 +58,7 @@ export function Pagination({
           <span
             aria-label="Next page, disabled"
             aria-disabled="true"
-            className="h-8 px-3 text-sm rounded-lg border border-border text-text-muted opacity-40 flex items-center cursor-not-allowed"
+            className="h-10 min-h-[44px] px-4 text-sm rounded-lg border border-border text-text-muted opacity-40 flex items-center cursor-not-allowed"
           >
             Next →
           </span>
