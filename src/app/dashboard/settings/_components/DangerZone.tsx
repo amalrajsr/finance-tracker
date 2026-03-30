@@ -20,7 +20,7 @@ export function DangerZone() {
 
   return (
     <>
-      <section className="rounded-2xl border border-debit/30 bg-debit-light/30 p-6 shadow-sm">
+      <section className="rounded-2xl border border-debit/30 bg-debit-light/30 p-6 shadow-sm dark:shadow-none">
         <h2 className="text-lg font-semibold text-text-primary mb-1">
           Danger zone
         </h2>

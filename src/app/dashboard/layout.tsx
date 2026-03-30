@@ -13,5 +13,12 @@ export default async function DashboardLayout({
     redirect("/login");
   }
 
-  return <AppShell userEmail={session.user?.email || ""}>{children}</AppShell>;
+  return (
+    <AppShell
+      userEmail={session.user?.email ?? ""}
+      userName={session.user?.name ?? null}
+    >
+      {children}
+    </AppShell>
+  );
 }

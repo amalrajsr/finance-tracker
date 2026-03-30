@@ -47,7 +47,9 @@ export function BackfillBanner() {
             </svg>
           </div>
           <div>
-            <h3 className="text-sm font-semibold">Categorization Complete</h3>
+            <h3 className="text-sm font-semibold text-text-primary">
+              Categorization Complete
+            </h3>
             <p className="text-xs mt-0.5 opacity-90">Successfully categorized {result?.updated} past transactions.</p>
           </div>
         </div>
@@ -66,7 +68,7 @@ export function BackfillBanner() {
         <div>
           <h3 className="text-sm font-semibold text-text-primary">New Categorization Engine Available</h3>
           <p className="text-xs text-text-secondary mt-1 max-w-xl leading-relaxed">
-            We've upgraded our system to automatically categorize your transactions. Run the categorization engine to apply these rules to your past uncategorized transactions.
+            We&apos;ve upgraded our system to automatically categorize your transactions. Run the categorization engine to apply these rules to your past uncategorized transactions.
           </p>
         </div>
       </div>

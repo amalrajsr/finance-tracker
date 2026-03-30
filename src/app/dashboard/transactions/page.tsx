@@ -128,7 +128,7 @@ export default async function TransactionsPage({
   const hasFilters = !!(search || typeParam || from || to || categoryParam);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Header */}
       <TransactionPageHeader
         totalEver={totalEver}
@@ -158,37 +158,37 @@ export default async function TransactionsPage({
                     <tr>
                       <th
                         scope="col"
-                        className="px-4 py-3 text-xs font-semibold text-text-secondary uppercase tracking-wide whitespace-nowrap"
+                        className="px-3 py-2 text-xs font-semibold text-text-secondary uppercase tracking-wide whitespace-nowrap"
                       >
                         Date
                       </th>
                       <th
                         scope="col"
-                        className="px-4 py-3 text-xs font-semibold text-text-secondary uppercase tracking-wide"
+                        className="px-3 py-2 text-xs font-semibold text-text-secondary uppercase tracking-wide"
                       >
                         Description
                       </th>
                       <th
                         scope="col"
-                        className="px-4 py-3 text-xs font-semibold text-text-secondary uppercase tracking-wide"
+                        className="px-3 py-2 text-xs font-semibold text-text-secondary uppercase tracking-wide"
                       >
                         Category
                       </th>
                       <th
                         scope="col"
-                        className="px-4 py-3 text-xs font-semibold text-text-secondary uppercase tracking-wide text-right"
+                        className="px-3 py-2 text-xs font-semibold text-text-secondary uppercase tracking-wide text-right"
                       >
                         Debit
                       </th>
                       <th
                         scope="col"
-                        className="px-4 py-3 text-xs font-semibold text-text-secondary uppercase tracking-wide text-right"
+                        className="px-3 py-2 text-xs font-semibold text-text-secondary uppercase tracking-wide text-right"
                       >
                         Credit
                       </th>
                       <th
                         scope="col"
-                        className="px-4 py-3 text-xs font-semibold text-text-secondary uppercase tracking-wide text-right"
+                        className="px-3 py-2 text-xs font-semibold text-text-secondary uppercase tracking-wide text-right"
                       >
                         Balance
                       </th>

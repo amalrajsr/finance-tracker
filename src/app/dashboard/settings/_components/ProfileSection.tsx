@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { formatDate } from "@/lib/format";
@@ -12,6 +13,7 @@ import {
 } from "../_services/use-profile";
 
 function ProfileEditor({ profile }: { profile: SettingsProfile }) {
+  const router = useRouter();
   const { toast } = useToast();
   const updateProfile = useUpdateSettingsProfile();
   const [name, setName] = useState(profile.name ?? "");
@@ -27,6 +29,7 @@ function ProfileEditor({ profile }: { profile: SettingsProfile }) {
     try {
       await updateProfile.mutateAsync(payload);
       toast("Profile updated", "success");
+      router.refresh();
     } catch (err) {
       toast(
         err instanceof Error ? err.message : "Could not update profile",
@@ -36,7 +39,7 @@ function ProfileEditor({ profile }: { profile: SettingsProfile }) {
   }
 
   return (
-    <section className="rounded-2xl border border-border bg-surface p-6 shadow-sm">
+    <section className="rounded-2xl border border-border bg-surface p-6 shadow-sm dark:shadow-none">
       <h2 className="text-lg font-semibold text-text-primary mb-1">Profile</h2>
       <p className="text-sm text-text-secondary mb-6">
         Your display name and account email.
@@ -95,7 +98,7 @@ export function ProfileSection() {
 
   if (isLoading) {
     return (
-      <section className="rounded-2xl border border-border bg-surface p-6 shadow-sm">
+      <section className="rounded-2xl border border-border bg-surface p-6 shadow-sm dark:shadow-none">
         <h2 className="text-lg font-semibold text-text-primary mb-1">Profile</h2>
         <p className="text-sm text-text-muted">Loading…</p>
       </section>
@@ -104,7 +107,7 @@ export function ProfileSection() {
 
   if (isError || !data) {
     return (
-      <section className="rounded-2xl border border-border bg-surface p-6 shadow-sm">
+      <section className="rounded-2xl border border-border bg-surface p-6 shadow-sm dark:shadow-none">
         <h2 className="text-lg font-semibold text-text-primary mb-1">Profile</h2>
         <p className="text-sm text-debit">
           {error instanceof Error ? error.message : "Failed to load profile"}

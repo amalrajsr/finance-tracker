@@ -20,7 +20,9 @@ export function TransactionPageHeader({ totalEver, total, hasFilters, categories
     <>
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-text-primary">Transactions</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-text-primary">
+            Transactions
+          </h1>
           <p className="text-sm text-text-secondary mt-1">
             {totalEver === 0
               ? "No transactions yet"

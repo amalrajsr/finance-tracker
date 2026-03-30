@@ -18,7 +18,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
     return (
       <select
         ref={ref}
-        className={`w-full rounded-lg border bg-background text-text-primary focus:outline-none focus:ring-2 focus:border-transparent transition-colors ${sizeClasses[selectSize]} ${
+        className={`w-full rounded-lg border border-border bg-surface text-text-primary focus:outline-none focus:ring-2 focus:border-transparent transition-colors dark:bg-surface-sunken ${sizeClasses[selectSize]} ${
           error
             ? "border-error focus:ring-error/50"
             : "border-border focus:ring-primary/50"

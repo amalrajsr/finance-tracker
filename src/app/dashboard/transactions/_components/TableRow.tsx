@@ -8,10 +8,10 @@ export function TableRow({ txn }: { txn: SerializedTransaction }) {
   const { categories } = txn;
   return (
     <tr className="border-t border-border hover:bg-background transition-colors">
-      <td className="px-4 py-3 text-sm text-text-secondary whitespace-nowrap">
+      <td className="px-3 py-2 text-sm text-text-secondary whitespace-nowrap">
         {formatDate(txn.date)}
       </td>
-      <td className="px-4 py-3 text-sm text-text-primary max-w-xs">
+      <td className="px-3 py-2 text-sm text-text-primary max-w-xs">
         <span className="line-clamp-2">{txn.description}</span>
         {txn.reference && (
           <span className="block text-xs text-text-muted mt-0.5 font-mono">
@@ -19,7 +19,7 @@ export function TableRow({ txn }: { txn: SerializedTransaction }) {
           </span>
         )}
       </td>
-      <td className="px-4 py-3 text-sm">
+      <td className="px-3 py-2 text-sm">
         {isDebit ? (
           <CategorySelect
             transactionId={txn.id}
@@ -37,7 +37,7 @@ export function TableRow({ txn }: { txn: SerializedTransaction }) {
           <span className="text-text-muted text-xs">—</span>
         )}
       </td>
-      <td className="px-4 py-3 text-sm text-right whitespace-nowrap">
+      <td className="px-3 py-2 text-sm text-right whitespace-nowrap">
         {isDebit ? (
           <span className="text-debit font-medium">
             {formatCurrency(txn.amount)}
@@ -46,7 +46,7 @@ export function TableRow({ txn }: { txn: SerializedTransaction }) {
           <span className="text-text-muted">—</span>
         )}
       </td>
-      <td className="px-4 py-3 text-sm text-right whitespace-nowrap">
+      <td className="px-3 py-2 text-sm text-right whitespace-nowrap">
         {!isDebit ? (
           <span className="text-credit font-medium">
             {formatCurrency(txn.amount)}
@@ -55,7 +55,7 @@ export function TableRow({ txn }: { txn: SerializedTransaction }) {
           <span className="text-text-muted">—</span>
         )}
       </td>
-      <td className="px-4 py-3 text-sm text-right text-text-secondary whitespace-nowrap group">
+      <td className="px-3 py-2 text-sm text-right text-text-secondary whitespace-nowrap group">
         <div className="flex items-center justify-end gap-3">
           <span>{formatCurrency(txn.balance)}</span>
           {txn.isManual && <ManualTransactionActions txn={txn} />}

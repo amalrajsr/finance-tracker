@@ -21,7 +21,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         ref={ref}
         aria-invalid={error || undefined}
         aria-describedby={errorId || undefined}
-        className={`w-full rounded-lg border bg-background text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:border-transparent transition-colors ${sizeClasses[inputSize]} ${
+        className={`w-full rounded-lg border border-border bg-surface text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:border-transparent transition-colors dark:bg-surface-sunken ${sizeClasses[inputSize]} ${
           error
             ? "border-error focus:ring-error/50"
             : "border-border focus:ring-primary/50"

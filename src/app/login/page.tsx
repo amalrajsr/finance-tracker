@@ -4,6 +4,7 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { AuthThemeToggle } from "@/components/auth/auth-theme-toggle";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useLogin } from "./_services/use-login";
@@ -31,7 +32,8 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-4">
+    <div className="min-h-screen flex items-center justify-center bg-background px-4 relative">
+      <AuthThemeToggle />
       <div className="w-full max-w-sm">
         {/* Brand */}
         <div className="text-center mb-8">
@@ -50,7 +52,9 @@ export default function LoginPage() {
               />
             </svg>
           </div>
-          <h1 className="text-2xl font-bold text-text-primary">Welcome back</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-text-primary">
+            Welcome back
+          </h1>
           <p className="text-sm text-text-secondary mt-1">
             Sign in to your FinTrack account
           </p>

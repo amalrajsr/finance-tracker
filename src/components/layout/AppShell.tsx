@@ -4,11 +4,14 @@ import Link from "next/link";
 import { ToastProvider } from "@/hooks/use-toast";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useTheme } from "@/components/providers/theme-provider";
 
 interface AppShellProps {
   children: React.ReactNode;
   userEmail: string;
+  /** Profile display name; when missing or empty, sidebar shows email */
+  userName?: string | null;
 }
 
 const navItems = [
@@ -69,7 +72,6 @@ const navItems = [
       </svg>
     ),
   },
-
   {
     label: "Settings",
     href: "/dashboard/settings",
@@ -96,19 +98,91 @@ const navItems = [
   },
 ];
 
-export function AppShell({ children, userEmail }: AppShellProps) {
+function ThemeToggleButton() {
+  const { theme, toggleTheme } = useTheme();
+  const isDark = theme === "dark";
+  return (
+    <button
+      type="button"
+      onClick={toggleTheme}
+      className="flex items-center justify-center w-9 h-9 rounded-lg text-text-muted hover:text-text-primary hover:bg-background dark:hover:bg-surface-raised transition-colors cursor-pointer shrink-0"
+      title={isDark ? "Switch to light mode" : "Switch to dark mode"}
+      aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+    >
+      {isDark ? (
+        <svg
+          className="w-5 h-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={1.5}
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
+          />
+        </svg>
+      ) : (
+        <svg
+          className="w-5 h-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={1.5}
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z"
+          />
+        </svg>
+      )}
+    </button>
+  );
+}
+
+export function AppShell({ children, userEmail, userName }: AppShellProps) {
   const pathname = usePathname();
-  const [sidebarExpanded, setSidebarExpanded] = useState(false);
+  const sidebarUserLabel =
+    userName?.trim() && userName.trim().length > 0
+      ? userName.trim()
+      : userEmail;
+  /** md–lg: icon rail unless user expands */
+  const [narrowExpanded, setNarrowExpanded] = useState(false);
+  const [isXl, setIsXl] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1280px)");
+    const apply = () => {
+      setIsXl(mq.matches);
+      if (mq.matches) setNarrowExpanded(false);
+    };
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, []);
 
   function isActive(href: string) {
     if (href === "/dashboard") return pathname === "/dashboard";
     return pathname.startsWith(href);
   }
 
+  const showLabels = isXl || narrowExpanded;
+  const sidebarWidthClass = isXl
+    ? "w-[220px]"
+    : narrowExpanded
+      ? "w-56"
+      : "w-16";
+  const mainMarginClass = isXl
+    ? "md:ml-[220px]"
+    : narrowExpanded
+      ? "md:ml-56"
+      : "md:ml-16";
+
   return (
     <ToastProvider>
-      <div className="min-h-screen bg-background w-full ">
-        {/* Skip to content — keyboard accessibility */}
+      <div className="min-h-screen bg-background w-full">
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-60 focus:px-4 focus:py-2 focus:bg-primary focus:text-white focus:rounded-lg focus:text-sm focus:font-medium"
@@ -116,94 +190,139 @@ export function AppShell({ children, userEmail }: AppShellProps) {
           Skip to content
         </a>
 
-        {/* Desktop Sidebar — expands as overlay, content never shifts */}
+        {/* Mobile: theme toggle (desktop sidebar is hidden below md) */}
+        <header className="md:hidden fixed top-0 left-0 right-0 z-40 border-b border-border bg-surface/95 backdrop-blur-sm supports-[backdrop-filter]:bg-surface/80 pt-[env(safe-area-inset-top,0px)]">
+          <div className="flex h-14 items-center justify-between gap-3 px-4">
+            <span className="min-w-0 truncate font-semibold text-sm text-text-primary">
+              FinTrack
+            </span>
+            <ThemeToggleButton />
+          </div>
+        </header>
+
         <aside
-          className={`hidden md:flex fixed left-0 top-0 h-screen flex-col border-r border-border bg-surface z-50 transition-all duration-200 shadow-lg ${
-            sidebarExpanded ? "w-56" : "w-16 shadow-none"
-          }`}
-          onMouseEnter={() => setSidebarExpanded(true)}
-          onMouseLeave={() => setSidebarExpanded(false)}
+          className={`hidden md:flex fixed left-0 top-0 h-screen flex-col border-r border-border bg-surface z-50 transition-[width] duration-200 ease-out ${sidebarWidthClass}`}
         >
-          {/* Logo */}
-          <div className="h-16 flex items-center px-4 border-b border-border">
+          <div className="h-14 flex items-center gap-2 px-3 border-b border-border shrink-0">
             <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center shrink-0">
               <span className="text-white font-bold text-sm">F</span>
             </div>
-            {sidebarExpanded && (
-              <span className="ml-3 font-bold text-text-primary text-sm whitespace-nowrap">
+            {showLabels && (
+              <span className="font-bold text-text-primary text-sm whitespace-nowrap truncate">
                 FinTrack
               </span>
             )}
+            {!isXl && (
+              <button
+                type="button"
+                onClick={() => setNarrowExpanded((v) => !v)}
+                className="ml-auto p-2 rounded-lg text-text-muted hover:text-text-primary hover:bg-background dark:hover:bg-surface-raised cursor-pointer shrink-0"
+                title={narrowExpanded ? "Collapse sidebar" : "Expand sidebar"}
+                aria-expanded={narrowExpanded}
+                aria-label={
+                  narrowExpanded ? "Collapse sidebar" : "Expand sidebar"
+                }
+              >
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  {narrowExpanded ? (
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M15.75 19.5L8.25 12l7.5-7.5"
+                    />
+                  ) : (
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M8.25 4.5l7.5 7.5-7.5 7.5"
+                    />
+                  )}
+                </svg>
+              </button>
+            )}
           </div>
 
-          {/* Nav */}
-          <nav className="flex-1 py-4 space-y-1 px-2">
+          <nav className="flex-1 py-3 space-y-0.5 px-2 overflow-y-auto">
             {navItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-3 h-10 px-2.5 rounded-lg text-sm font-medium transition-colors ${
+                className={`relative flex items-center gap-3 min-h-10 px-2.5 rounded-lg text-sm font-medium transition-colors ${
                   isActive(item.href)
-                    ? "bg-primary-light text-primary"
-                    : "text-text-secondary hover:bg-background hover:text-text-primary"
+                    ? "bg-primary-light text-primary before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-6 before:rounded-r before:bg-primary"
+                    : "text-text-secondary hover:bg-background hover:text-text-primary dark:hover:bg-surface-raised"
                 }`}
+                title={!showLabels ? item.label : undefined}
               >
                 <span className="shrink-0">{item.icon}</span>
-                {sidebarExpanded && (
-                  <span className="whitespace-nowrap">{item.label}</span>
+                {showLabels && (
+                  <span className="whitespace-nowrap truncate">{item.label}</span>
                 )}
               </Link>
             ))}
           </nav>
 
-          {/* User section */}
-          <div className="border-t border-border p-3">
-            {sidebarExpanded ? (
-              <div className="flex items-center justify-between">
-                <span className="text-xs text-text-secondary truncate max-w-[120px]">
-                  {userEmail}
-                </span>
+          <div className="border-t border-border p-2 space-y-2 shrink-0">
+            {showLabels ? (
+              <>
+                <div className="flex items-center justify-between gap-2 px-1">
+                  <span className="text-xs text-text-secondary truncate min-w-0">
+                    {sidebarUserLabel}
+                  </span>
+                  <ThemeToggleButton />
+                </div>
                 <button
+                  type="button"
                   onClick={() => signOut({ callbackUrl: "/login" })}
-                  className="text-xs text-text-muted hover:text-debit transition-colors cursor-pointer"
+                  className="w-full text-left text-xs text-text-muted hover:text-debit transition-colors cursor-pointer px-1 py-1.5 rounded-lg hover:bg-background dark:hover:bg-surface-raised"
                 >
                   Logout
                 </button>
-              </div>
+              </>
             ) : (
-              <button
-                onClick={() => signOut({ callbackUrl: "/login" })}
-                className="w-full flex justify-center cursor-pointer"
-                title="Logout"
-              >
-                <svg
-                  className="w-5 h-5 text-text-muted hover:text-debit transition-colors"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={1.5}
+              <div className="flex flex-col items-center gap-1">
+                <ThemeToggleButton />
+                <button
+                  type="button"
+                  onClick={() => signOut({ callbackUrl: "/login" })}
+                  className="w-full flex justify-center cursor-pointer p-2 rounded-lg hover:bg-background dark:hover:bg-surface-raised"
+                  title="Logout"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"
-                  />
-                </svg>
-              </button>
+                  <svg
+                    className="w-5 h-5 text-text-muted hover:text-debit transition-colors"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={1.5}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"
+                    />
+                  </svg>
+                </button>
+              </div>
             )}
           </div>
         </aside>
 
-        {/* Main content — always offset by collapsed sidebar width */}
         <main
           id="main-content"
-          className="pb-20 md:pb-0 md:ml-16"
+          className={`pt-[calc(3.5rem+env(safe-area-inset-top,0px))] pb-20 md:pt-0 md:pb-0 ${mainMarginClass}`}
           tabIndex={-1}
         >
-          <div className="max-w-7xl mx-auto p-4 md:p-8">{children}</div>
+          <div className="max-w-[1400px] mx-auto p-4 md:px-6 md:py-5">
+            {children}
+          </div>
         </main>
 
-        {/* Mobile Bottom Nav */}
         <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-surface border-t border-border flex items-stretch justify-around z-40 px-1 safe-area-pb">
           {navItems.map((item) => (
             <Link
