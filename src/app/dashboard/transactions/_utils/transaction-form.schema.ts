@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const transactionFormSchema = z.object({
-  amount: z.number({ invalid_type_error: "Amount is required" })
+  amount: z.number({ error: "Amount is required" })
     .positive("Amount must be greater than 0")
     .multipleOf(0.01, "Max 2 decimal places"),
   date: z.string()

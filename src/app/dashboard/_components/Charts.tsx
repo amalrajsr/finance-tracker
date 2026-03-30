@@ -17,6 +17,19 @@ import {
 
 const formatCurrency = (val: number) => `₹${val.toLocaleString("en-IN")}`;
 
+function formatTooltipCurrency(
+  value: number | string | ReadonlyArray<number | string> | undefined
+): string {
+  if (value == null) return "";
+  const n =
+    typeof value === "number"
+      ? value
+      : Array.isArray(value)
+        ? Number(value[0])
+        : Number(value);
+  return Number.isFinite(n) ? formatCurrency(n) : String(value);
+}
+
 const THEME_CREDIT = "#059669";
 const THEME_DEBIT = "#e11d48";
 const THEME_PRIMARY = "#4f46e5";
@@ -60,8 +73,8 @@ export function MonthlyTrendChart({ data }: { data: any[] }) {
           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
           <XAxis dataKey="displayMonth" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "#6B7280" }} />
           <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "#6B7280" }} tickFormatter={(val) => `₹${val/1000}k`} />
-          <Tooltip 
-            formatter={(value: number) => formatCurrency(value)}
+          <Tooltip
+            formatter={(value) => formatTooltipCurrency(value)}
             contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
           />
           <Legend iconType="circle" wrapperStyle={{ fontSize: 12, paddingTop: '10px' }} />
@@ -112,8 +125,8 @@ export function CategoryBreakdownChart({ data }: { data: any[] }) {
               <Cell key={`cell-${index}`} fill={entry.colour} />
             ))}
           </Pie>
-          <Tooltip 
-            formatter={(value: number) => formatCurrency(value)}
+          <Tooltip
+            formatter={(value) => formatTooltipCurrency(value)}
             contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
           />
           <Legend
@@ -150,8 +163,8 @@ export function DailySpendingChart({ data }: { data: any[] }) {
           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
           <XAxis dataKey="date" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: "#6B7280" }} interval="preserveStartEnd" minTickGap={20} />
           <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: "#6B7280" }} tickFormatter={(val) => `₹${val/1000}k`} />
-          <Tooltip 
-            formatter={(value: number) => formatCurrency(value)}
+          <Tooltip
+            formatter={(value) => formatTooltipCurrency(value)}
             contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)', fontSize: '12px' }}
             cursor={{ fill: '#F3F4F6' }}
           />
