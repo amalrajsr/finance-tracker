@@ -1,8 +1,9 @@
 import type { BankParser, ParserResult } from "./types";
+import { federalParser } from "./banks/federal";
 import { hdfcParser } from "./banks/hdfc";
 
 /** Registry of all available bank parsers */
-const parsers: BankParser[] = [hdfcParser];
+const parsers: BankParser[] = [hdfcParser, federalParser];
 
 /**
  * Auto-detect bank from extracted text and parse transactions.
@@ -26,7 +27,7 @@ export function parseTransactions(textLines: string[]): ParserResult {
         line: 0,
         raw: "",
         reason:
-          "Could not detect the bank from this statement. Currently supported: HDFC savings account.",
+          "Could not detect the bank from this statement. Currently supported: HDFC savings account, Federal Bank.",
       },
     ],
   };

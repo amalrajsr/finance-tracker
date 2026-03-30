@@ -4,36 +4,29 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useLogin } from "./_services/use-login";
 
 export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const {
+    mutateAsync: login,
+    isPending: isLoading,
+    error: mutationError,
+  } = useLogin();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setError("");
-    setIsLoading(true);
 
     try {
-      const result = await signIn("credentials", {
-        email,
-        password,
-        redirect: false,
-      });
-
-      if (result?.error) {
-        setError("Invalid email or password");
-      } else {
-        router.push("/dashboard");
-        router.refresh();
-      }
+      await login({ email, password });
+      router.push("/dashboard");
+      router.refresh();
     } catch {
-      setError("Something went wrong. Please try again.");
-    } finally {
-      setIsLoading(false);
+      // Error is caught and stored in mutationError
     }
   }
 
@@ -65,9 +58,11 @@ export default function LoginPage() {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
-          {error && (
+          {mutationError && (
             <div className="bg-debit-light text-debit text-sm px-4 py-3 rounded-lg">
-              {error}
+              {mutationError instanceof Error
+                ? mutationError.message
+                : "Something went wrong. Please try again."}
             </div>
           )}
 
@@ -78,14 +73,15 @@ export default function LoginPage() {
             >
               Email
             </label>
-            <input
+            <Input
               id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
               placeholder="you@example.com"
-              className="w-full h-11 px-3 rounded-lg border border-border bg-surface text-text-primary placeholder:text-text-muted text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
+              inputSize="lg"
+              className="bg-surface"
             />
           </div>
 
@@ -96,24 +92,26 @@ export default function LoginPage() {
             >
               Password
             </label>
-            <input
+            <Input
               id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
               placeholder="••••••••"
-              className="w-full h-11 px-3 rounded-lg border border-border bg-surface text-text-primary placeholder:text-text-muted text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
+              inputSize="lg"
+              className="bg-surface"
             />
           </div>
 
-          <button
+          <Button
             type="submit"
-            disabled={isLoading}
-            className="w-full h-11 bg-primary hover:bg-primary-hover text-white font-medium rounded-lg text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+            loading={isLoading}
+            size="lg"
+            className="w-full"
           >
             {isLoading ? "Signing in..." : "Sign in"}
-          </button>
+          </Button>
         </form>
 
         {/* Footer */}

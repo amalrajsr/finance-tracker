@@ -1,66 +1,46 @@
 "use client";
 
 import { useState } from "react";
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useSignup } from "./_services/use-signup";
 
 export default function SignupPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [validationError, setValidationError] = useState("");
+  const {
+    mutateAsync: signup,
+    isPending: isLoading,
+    error: mutationError,
+  } = useSignup();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setError("");
+    setValidationError("");
 
     if (password !== confirmPassword) {
-      setError("Passwords do not match");
+      setValidationError("Passwords do not match");
       return;
     }
 
     if (password.length < 6) {
-      setError("Password must be at least 6 characters");
+      setValidationError("Password must be at least 6 characters");
       return;
     }
 
-    setIsLoading(true);
-
     try {
-      const res = await fetch("/api/auth/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.error || "Failed to create account");
-        return;
-      }
-
-      // Auto sign-in after successful signup
-      const result = await signIn("credentials", {
-        email,
-        password,
-        redirect: false,
-      });
-
-      if (result?.error) {
-        // Account created but sign-in failed — redirect to login
+      await signup({ email, password });
+      router.push("/dashboard");
+      router.refresh();
+    } catch (err) {
+      if (err instanceof Error && err.message.includes("login manually")) {
         router.push("/login");
-      } else {
-        router.push("/dashboard");
-        router.refresh();
       }
-    } catch {
-      setError("Something went wrong. Please try again.");
-    } finally {
-      setIsLoading(false);
     }
   }
 
@@ -94,9 +74,12 @@ export default function SignupPage() {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
-          {error && (
+          {(validationError || mutationError) && (
             <div className="bg-debit-light text-debit text-sm px-4 py-3 rounded-lg">
-              {error}
+              {validationError ||
+                (mutationError instanceof Error
+                  ? mutationError.message
+                  : "Something went wrong. Please try again.")}
             </div>
           )}
 
@@ -107,14 +90,15 @@ export default function SignupPage() {
             >
               Email
             </label>
-            <input
+            <Input
               id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
               placeholder="you@example.com"
-              className="w-full h-11 px-3 rounded-lg border border-border bg-surface text-text-primary placeholder:text-text-muted text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
+              inputSize="lg"
+              className="bg-surface"
             />
           </div>
 
@@ -125,14 +109,15 @@ export default function SignupPage() {
             >
               Password
             </label>
-            <input
+            <Input
               id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
               placeholder="Min. 6 characters"
-              className="w-full h-11 px-3 rounded-lg border border-border bg-surface text-text-primary placeholder:text-text-muted text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
+              inputSize="lg"
+              className="bg-surface"
             />
           </div>
 
@@ -143,24 +128,26 @@ export default function SignupPage() {
             >
               Confirm Password
             </label>
-            <input
+            <Input
               id="confirmPassword"
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
               placeholder="Re-enter your password"
-              className="w-full h-11 px-3 rounded-lg border border-border bg-surface text-text-primary placeholder:text-text-muted text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
+              inputSize="lg"
+              className="bg-surface"
             />
           </div>
 
-          <button
+          <Button
             type="submit"
-            disabled={isLoading}
-            className="w-full h-11 bg-primary hover:bg-primary-hover text-white font-medium rounded-lg text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+            loading={isLoading}
+            size="lg"
+            className="w-full"
           >
             {isLoading ? "Creating account..." : "Create account"}
-          </button>
+          </Button>
         </form>
 
         {/* Footer */}

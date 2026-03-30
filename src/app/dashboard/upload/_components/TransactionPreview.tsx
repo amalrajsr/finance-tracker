@@ -147,14 +147,14 @@ export function TransactionPreview({
         <button
           onClick={onCancel}
           disabled={isSubmitting}
-          className="h-10 px-4 rounded-lg border border-border text-sm font-medium text-text-secondary hover:bg-background transition-colors disabled:opacity-50 cursor-pointer"
+          className="h-10 min-h-[44px] px-4 rounded-lg border border-border text-sm font-medium text-text-secondary hover:bg-background transition-colors disabled:opacity-50 cursor-pointer"
         >
           Cancel
         </button>
         <button
           onClick={handleConfirm}
           disabled={selected.size === 0 || isSubmitting}
-          className="h-10 px-6 rounded-lg bg-primary hover:bg-primary-hover text-white text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 cursor-pointer"
+          className="h-10 min-h-[44px] px-6 rounded-lg bg-primary hover:bg-primary-hover text-white text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 cursor-pointer"
         >
           {isSubmitting ? (
             <>

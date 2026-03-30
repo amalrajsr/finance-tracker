@@ -1,0 +1,169 @@
+"use client";
+
+import { useState } from "react";
+import { useManualTransaction } from "../_hooks/use-manual-transaction";
+import { transactionFormSchema, TransactionFormValues } from "../_utils/transaction-form.schema";
+import { CategoryOption } from "./CategorySelect";
+import { CategoryDropdown } from "./CategoryDropdown";
+import { useToast } from "@/hooks/use-toast";
+import { Input } from "@/components/ui/input";
+import { Select } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+
+interface TransactionFormProps {
+  mode: "create" | "edit";
+  initialValues?: Partial<TransactionFormValues> & { id?: string };
+  categories: CategoryOption[];
+  onSuccess: () => void;
+  onCancel: () => void;
+}
+
+export function TransactionForm({ mode, initialValues, categories, onSuccess, onCancel }: TransactionFormProps) {
+  const [formData, setFormData] = useState<Partial<TransactionFormValues>>({
+    amount: initialValues?.amount ?? undefined,
+    date: initialValues?.date ?? new Date().toISOString().split("T")[0],
+    type: initialValues?.type ?? "debit",
+    description: initialValues?.description ?? "",
+    categoryId: initialValues?.categoryId ?? null,
+  });
+  
+  const [errors, setErrors] = useState<Record<string, string[]>>({});
+  const [apiError, setApiError] = useState("");
+  
+  const { create, edit, isLoading } = useManualTransaction();
+  const { toast } = useToast();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrors({});
+    setApiError("");
+
+    const payload = {
+      ...formData,
+      amount: formData.amount ? Number(formData.amount) : undefined,
+    };
+
+    const parsed = transactionFormSchema.safeParse(payload);
+    if (!parsed.success) {
+      setErrors(parsed.error.flatten().fieldErrors);
+      return;
+    }
+
+    let result;
+    if (mode === "create") {
+      result = await create(parsed.data);
+    } else {
+      if (!initialValues?.id) return;
+      result = await edit(initialValues.id, parsed.data);
+    }
+
+    if (result.ok) {
+      toast(mode === "create" ? "Transaction added successfully" : "Transaction updated successfully", "success");
+      onSuccess();
+    } else {
+      setApiError(result.error || "An error occurred");
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      {apiError && (
+        <div className="p-3 text-sm text-error bg-error-light border border-error/20 rounded-lg">
+          {apiError}
+        </div>
+      )}
+      
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label htmlFor="txn-amount" className="block text-xs font-medium text-text-secondary mb-1">Amount</label>
+          <Input
+            id="txn-amount"
+            type="number"
+            step="0.01"
+            value={formData.amount || ""}
+            onChange={(e) => setFormData({ ...formData, amount: e.target.value ? Number(e.target.value) : undefined })}
+            error={!!errors.amount}
+            errorId={errors.amount ? "txn-amount-error" : undefined}
+            placeholder="0.00"
+            inputSize="md"
+          />
+          {errors.amount && <p id="txn-amount-error" className="text-xs text-error mt-1">{errors.amount[0]}</p>}
+        </div>
+        
+        <div>
+          <label htmlFor="txn-date" className="block text-xs font-medium text-text-secondary mb-1">Date</label>
+          <Input
+            id="txn-date"
+            type="date"
+            value={formData.date || ""}
+            onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+            error={!!errors.date}
+            errorId={errors.date ? "txn-date-error" : undefined}
+            inputSize="md"
+          />
+          {errors.date && <p id="txn-date-error" className="text-xs text-error mt-1">{errors.date[0]}</p>}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label htmlFor="txn-type" className="block text-xs font-medium text-text-secondary mb-1">Type</label>
+          <Select
+            id="txn-type"
+            value={formData.type}
+            onChange={(e) => setFormData({ ...formData, type: e.target.value as "debit" | "credit" })}
+            error={!!errors.type}
+            selectSize="md"
+          >
+            <option value="debit">Debit (Expense)</option>
+            <option value="credit">Credit (Income)</option>
+          </Select>
+          {errors.type && <p className="text-xs text-error mt-1">{errors.type[0]}</p>}
+        </div>
+        
+        <div>
+          <label className="block text-xs font-medium text-text-secondary mb-1">Category (Optional)</label>
+          <CategoryDropdown
+            value={formData.categoryId || null}
+            onChange={(id) => setFormData({ ...formData, categoryId: id })}
+            categories={categories}
+          />
+        </div>
+      </div>
+
+      <div>
+        <label htmlFor="txn-desc" className="block text-xs font-medium text-text-secondary mb-1">Description / Merchant</label>
+        <Input
+          id="txn-desc"
+          type="text"
+          value={formData.description || ""}
+          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+          error={!!errors.description}
+          errorId={errors.description ? "txn-desc-error" : undefined}
+          placeholder="e.g. Swiggy, Salary, etc."
+          inputSize="md"
+        />
+        {errors.description && <p id="txn-desc-error" className="text-xs text-error mt-1">{errors.description[0]}</p>}
+      </div>
+
+      <div className="flex justify-end gap-3 pt-4 border-t border-border mt-6">
+        <Button
+          type="button"
+          onClick={onCancel}
+          disabled={isLoading}
+          variant="ghost"
+          size="md"
+        >
+          Cancel
+        </Button>
+        <Button
+          type="submit"
+          loading={isLoading}
+          size="md"
+        >
+          {mode === "create" ? "Save Transaction" : "Save Changes"}
+        </Button>
+      </div>
+    </form>
+  );
+}
