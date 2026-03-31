@@ -1,5 +1,16 @@
 # CLAUDE.md — fn-tracker (FinTrack)
 
+## Mandatory Rules
+
+**Before writing or modifying any code, you MUST follow `.claude/rules/code-style-guide.md`.** Key non-negotiable rules:
+
+- **Route = Feature**: Each route is self-contained. Auth pages live under `(auth)/` route group.
+- **Page max 200 lines**: Break into components under `_components/` if exceeded.
+- **Pages are thin wrappers**: Compose from `_components/`, `_hooks/`, `_services/` — no heavy inline JSX.
+- **Shared code in route groups**: If two sibling routes share logic, extract to the group's `_components/` or `_hooks/`.
+- **No cross-route imports**: Shared code goes to global `components/`, `hooks/`, `utils/`, or `lib/`.
+- **Naming**: `kebab-case` files, `PascalCase` components, `use-` prefix hooks, `UPPER_SNAKE_CASE` constants.
+
 ## Project Overview
 
 **FinTrack** is a privacy-first personal expense tracker. Users upload encrypted PDF bank statements, which are parsed entirely client-side (no PDF data is ever sent to the server). Extracted transactions are saved, auto-categorized, and displayed with analytics.

@@ -3,7 +3,8 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useState, useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+import { DatePicker } from "@/components/ui/date-picker";
 import { Button } from "@/components/ui/button";
 import { BottomSheet } from "@/components/ui/bottom-sheet";
 
@@ -131,49 +132,55 @@ export function TransactionFilters({
 
         <div className="sm:w-44">
           <label
-            htmlFor="txn-type"
             className="block text-xs font-medium text-text-secondary mb-1"
           >
             Type
           </label>
           <Select
-            id="txn-type"
             value={type}
-            onChange={(e) => {
-              setType(e.target.value);
-              pushFilters({ type: e.target.value });
+            onValueChange={(val: string | null) => {
+              const v = !val || val === "__all__" ? "" : val;
+              setType(v);
+              pushFilters({ type: v });
             }}
-            selectSize="md"
           >
-            <option value="">All</option>
-            <option value="debit">Debit</option>
-            <option value="credit">Credit</option>
+            <SelectTrigger className="w-full h-10 min-h-[44px] border-border-light bg-surface text-text-primary focus-visible:border-border-strong focus-visible:ring-1 focus-visible:ring-border-strong/25 dark:bg-surface-sunken">
+              <SelectValue placeholder="All" />
+            </SelectTrigger>
+            <SelectContent className="bg-surface dark:bg-surface-raised">
+              <SelectItem value="__all__">All</SelectItem>
+              <SelectItem value="debit">Debit</SelectItem>
+              <SelectItem value="credit">Credit</SelectItem>
+            </SelectContent>
           </Select>
         </div>
 
         <div className="sm:w-48">
           <label
-            htmlFor="txn-category"
             className="block text-xs font-medium text-text-secondary mb-1"
           >
             Category
           </label>
           <Select
-            id="txn-category"
             value={category}
-            onChange={(e) => {
-              setCategory(e.target.value);
-              pushFilters({ category: e.target.value });
+            onValueChange={(val: string | null) => {
+              const v = !val || val === "__all__" ? "" : val;
+              setCategory(v);
+              pushFilters({ category: v });
             }}
-            selectSize="md"
           >
-            <option value="">All Categories</option>
-            <option value="uncategorized">Uncategorized</option>
-            {categories.map((c) => (
-              <option key={c.id} value={c.slug}>
-                {c.name}
-              </option>
-            ))}
+            <SelectTrigger className="w-full h-10 min-h-[44px] border-border-light bg-surface text-text-primary focus-visible:border-border-strong focus-visible:ring-1 focus-visible:ring-border-strong/25 dark:bg-surface-sunken">
+              <SelectValue placeholder="All Categories" />
+            </SelectTrigger>
+            <SelectContent className="bg-surface dark:bg-surface-raised">
+              <SelectItem value="__all__">All Categories</SelectItem>
+              <SelectItem value="uncategorized">Uncategorized</SelectItem>
+              {categories.map((c) => (
+                <SelectItem key={c.id} value={c.slug}>
+                  {c.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
           </Select>
         </div>
       </div>
@@ -181,38 +188,32 @@ export function TransactionFilters({
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="flex-1">
           <label
-            htmlFor="txn-from"
             className="block text-xs font-medium text-text-secondary mb-1"
           >
             From date
           </label>
-          <Input
-            id="txn-from"
-            type="date"
+          <DatePicker
             value={from}
-            onChange={(e) => {
-              setFrom(e.target.value);
-              pushFilters({ from: e.target.value });
+            onChange={(val) => {
+              setFrom(val);
+              pushFilters({ from: val });
             }}
-            inputSize="md"
+            placeholder="Start date"
           />
         </div>
         <div className="flex-1">
           <label
-            htmlFor="txn-to"
             className="block text-xs font-medium text-text-secondary mb-1"
           >
             To date
           </label>
-          <Input
-            id="txn-to"
-            type="date"
+          <DatePicker
             value={to}
-            onChange={(e) => {
-              setTo(e.target.value);
-              pushFilters({ to: e.target.value });
+            onChange={(val) => {
+              setTo(val);
+              pushFilters({ to: val });
             }}
-            inputSize="md"
+            placeholder="End date"
           />
         </div>
       </div>

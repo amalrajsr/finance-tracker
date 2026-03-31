@@ -1,12 +1,7 @@
-import React from "react";
+import * as React from "react";
+import { cn } from "@/lib/utils";
 
 type InputSize = "sm" | "md" | "lg";
-
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  inputSize?: InputSize;
-  error?: boolean;
-  errorId?: string;
-}
 
 const sizeClasses: Record<InputSize, string> = {
   sm: "h-9 min-h-[44px] px-3 text-xs",
@@ -14,22 +9,38 @@ const sizeClasses: Record<InputSize, string> = {
   lg: "h-11 min-h-[44px] px-3 text-sm",
 };
 
-export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ inputSize = "md", error = false, errorId, className = "", ...props }, ref) => {
-    return (
-      <input
-        ref={ref}
-        aria-invalid={error || undefined}
-        aria-describedby={errorId || undefined}
-        className={`w-full rounded-lg border bg-surface text-text-primary placeholder:text-text-muted focus:outline-none transition-[border-color,box-shadow] duration-150 dark:bg-surface-sunken ${sizeClasses[inputSize]} ${
-          error
-            ? "border-error focus:border-error focus:ring-[3px] focus:ring-error/15"
-            : "border-border-light focus:border-border-strong focus:ring-[3px] focus:ring-focus-ring"
-        } ${className}`}
-        {...props}
-      />
-    );
-  },
-);
+interface InputProps extends React.ComponentProps<"input"> {
+  inputSize?: InputSize;
+  error?: boolean;
+  errorId?: string;
+}
 
-Input.displayName = "Input";
+function Input({
+  className,
+  type,
+  inputSize = "md",
+  error = false,
+  errorId,
+  ...props
+}: InputProps) {
+  return (
+    <input
+      type={type}
+      data-slot="input"
+      aria-invalid={error || undefined}
+      aria-describedby={errorId || undefined}
+      className={cn(
+        "w-full rounded-lg border bg-surface text-text-primary placeholder:text-text-muted outline-none transition-[border-color,box-shadow] duration-150 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 dark:bg-surface-sunken",
+        sizeClasses[inputSize],
+        error
+          ? "border-error focus:border-error focus:ring-1 focus:ring-error/20"
+          : "border-border-light focus:border-border-strong focus:ring-1 focus:ring-border-strong/25",
+        className,
+      )}
+      {...props}
+    />
+  );
+}
+
+export { Input };
+export type { InputProps };

@@ -7,7 +7,8 @@ import { CategoryOption } from "./CategorySelect";
 import { CategoryDropdown } from "./CategoryDropdown";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
+import { NativeSelect as Select } from "@/components/ui/native-select";
+import { DatePicker } from "@/components/ui/date-picker";
 import { Button } from "@/components/ui/button";
 
 interface TransactionFormProps {
@@ -92,14 +93,11 @@ export function TransactionForm({ mode, initialValues, categories, onSuccess, on
         
         <div>
           <label htmlFor="txn-date" className="block text-xs font-medium text-text-secondary mb-1">Date</label>
-          <Input
+          <DatePicker
             id="txn-date"
-            type="date"
             value={formData.date || ""}
-            onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+            onChange={(val) => setFormData({ ...formData, date: val })}
             error={!!errors.date}
-            errorId={errors.date ? "txn-date-error" : undefined}
-            inputSize="md"
           />
           {errors.date && <p id="txn-date-error" className="text-xs text-error mt-1">{errors.date[0]}</p>}
         </div>

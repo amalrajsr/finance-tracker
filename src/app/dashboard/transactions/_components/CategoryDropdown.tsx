@@ -1,8 +1,10 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
+import { ChevronDownIcon } from "lucide-react";
 import { CategoryBadge } from "./CategoryBadge";
 import { CategoryOption } from "./CategorySelect";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 interface CategoryDropdownProps {
   value: string | null;
@@ -11,67 +13,44 @@ interface CategoryDropdownProps {
 }
 
 export function CategoryDropdown({ value, onChange, categories }: CategoryDropdownProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  const popoverRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (popoverRef.current && !popoverRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    }
-    if (isOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isOpen]);
-
+  const [open, setOpen] = useState(false);
   const selectedCategory = categories.find((c) => c.id === value);
 
   return (
-    <div className="relative inline-block w-full" ref={popoverRef}>
-      <button
-        type="button"
-        onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between px-3 py-2.5 text-sm border border-border-light rounded-lg bg-surface hover:bg-surface-raised focus:outline-none focus:border-border-strong focus:ring-[3px] focus:ring-focus-ring transition-[border-color,box-shadow] duration-150"
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger
+        className="w-full flex items-center justify-between px-3 py-2.5 text-sm border border-border-light rounded-lg bg-surface hover:bg-surface-raised outline-none transition-[border-color,box-shadow] duration-150 focus:border-border-strong focus:ring-1 focus:ring-border-strong/25"
       >
         {selectedCategory ? (
           <CategoryBadge {...selectedCategory} />
         ) : (
           <span className="text-text-muted">Uncategorized</span>
         )}
-        <svg
-          className="w-4 h-4 text-text-muted"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth={2}
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-        </svg>
-      </button>
+        <ChevronDownIcon className="size-4 text-text-muted" />
+      </PopoverTrigger>
 
-      {isOpen && (
-        <div className="absolute z-10 left-0 w-full mt-1 bg-surface-raised border border-border-light shadow-lg rounded-xl overflow-hidden py-1 max-h-60 overflow-y-auto dropdown-scroll">
+      <PopoverContent
+        align="start"
+        className="w-(--anchor-width) p-1 max-h-60 overflow-y-auto bg-surface dark:bg-surface-raised dropdown-scroll"
+      >
+        <button
+          type="button"
+          onClick={() => { onChange(null); setOpen(false); }}
+          className="w-full px-3 py-2.5 min-h-[44px] text-sm text-left rounded-md hover:bg-accent transition-colors text-text-secondary cursor-pointer"
+        >
+          Uncategorized
+        </button>
+        {categories.map((cat) => (
           <button
+            key={cat.id}
             type="button"
-            onClick={() => { onChange(null); setIsOpen(false); }}
-            className="w-full px-3 py-2.5 min-h-[44px] text-sm text-left hover:bg-background transition-colors text-text-secondary cursor-pointer"
+            onClick={() => { onChange(cat.id); setOpen(false); }}
+            className="w-full px-3 py-2.5 min-h-[44px] text-left rounded-md hover:bg-accent transition-colors flex items-center justify-between cursor-pointer"
           >
-            Uncategorized
+            <CategoryBadge {...cat} />
           </button>
-          {categories.map((cat) => (
-            <button
-              key={cat.id}
-              type="button"
-              onClick={() => { onChange(cat.id); setIsOpen(false); }}
-              className="w-full px-3 py-2.5 min-h-[44px] text-left hover:bg-background transition-colors flex items-center justify-between cursor-pointer"
-            >
-              <CategoryBadge {...cat} />
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
+        ))}
+      </PopoverContent>
+    </Popover>
   );
 }
