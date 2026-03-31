@@ -41,6 +41,12 @@ export type ChartPalette = {
   tooltipBorder: string;
   legendColor: string;
   othersSlice: string;
+  chart1: string;
+  chart2: string;
+  chart3: string;
+  chart4: string;
+  chart5: string;
+  chart6: string;
 };
 
 function readChartPalette(): ChartPalette {
@@ -48,31 +54,43 @@ function readChartPalette(): ChartPalette {
   const pick = (name: string, fallback: string) =>
     r.getPropertyValue(name).trim() || fallback;
   return {
-    credit: pick("--app-credit", "#059669"),
-    debit: pick("--app-debit", "#e11d48"),
-    primary: pick("--app-primary", "#4f46e5"),
-    grid: pick("--app-chart-grid", "#e2e8f0"),
-    tick: pick("--app-chart-tick", "#64748b"),
-    cursor: pick("--app-chart-cursor", "#f1f5f9"),
-    tooltipBg: pick("--app-surface", "#ffffff"),
-    tooltipBorder: pick("--app-border", "#e2e8f0"),
-    legendColor: pick("--app-text-primary", "#0f172a"),
-    othersSlice: pick("--app-text-muted", "#94a3b8"),
+    credit: pick("--app-credit", "#2D6A4F"),
+    debit: pick("--app-debit", "#9B2C2C"),
+    primary: pick("--app-primary", "#1B1510"),
+    grid: pick("--app-chart-grid", "#DDD8D0"),
+    tick: pick("--app-chart-tick", "#74685E"),
+    cursor: pick("--app-chart-cursor", "#EDE8DF"),
+    tooltipBg: pick("--app-chart-tooltip-bg", "#FFFDF9"),
+    tooltipBorder: pick("--app-chart-tooltip-border", "#D6D0C8"),
+    legendColor: pick("--app-text-primary", "#1B1510"),
+    othersSlice: pick("--app-text-muted", "#9A8E84"),
+    chart1: pick("--app-chart-1", "#1B1510"),
+    chart2: pick("--app-chart-2", "#7C6650"),
+    chart3: pick("--app-chart-3", "#A4845C"),
+    chart4: pick("--app-chart-4", "#6B8F71"),
+    chart5: pick("--app-chart-5", "#9C7178"),
+    chart6: pick("--app-chart-6", "#5E7F8A"),
   };
 }
 
 function useChartPalette(): ChartPalette {
   const [palette, setPalette] = useState<ChartPalette>(() => ({
-    credit: "#059669",
-    debit: "#e11d48",
-    primary: "#4f46e5",
-    grid: "#e2e8f0",
-    tick: "#64748b",
-    cursor: "#f1f5f9",
-    tooltipBg: "#ffffff",
-    tooltipBorder: "#e2e8f0",
-    legendColor: "#0f172a",
-    othersSlice: "#94a3b8",
+    credit: "#2D6A4F",
+    debit: "#9B2C2C",
+    primary: "#1B1510",
+    grid: "#DDD8D0",
+    tick: "#74685E",
+    cursor: "#EDE8DF",
+    tooltipBg: "#FFFDF9",
+    tooltipBorder: "#D6D0C8",
+    legendColor: "#1B1510",
+    othersSlice: "#9A8E84",
+    chart1: "#1B1510",
+    chart2: "#7C6650",
+    chart3: "#A4845C",
+    chart4: "#6B8F71",
+    chart5: "#9C7178",
+    chart6: "#5E7F8A",
   }));
 
   useEffect(() => {
@@ -231,7 +249,7 @@ export function CategoryBreakdownChart({
   const chartData = data.slice(0, 6).map((d) => ({
     name: d.name,
     value: parseFloat(String(d.total)),
-    colour: d.colour || "#9CA3AF",
+    colour: d.colour || palette.chart3,
   }));
 
   if (data.length > 6) {
@@ -333,7 +351,7 @@ export function DailySpendingChart({ data }: { data: DailyHeatmapRow[] }) {
           <Bar
             dataKey="amount"
             name="Spent"
-            fill={palette.primary}
+            fill={palette.chart2}
             radius={[2, 2, 0, 0]}
           />
         </BarChart>

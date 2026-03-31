@@ -39,7 +39,7 @@ function ProfileEditor({ profile }: { profile: SettingsProfile }) {
   }
 
   return (
-    <section className="rounded-2xl border border-border bg-surface p-6 shadow-sm dark:shadow-none">
+    <section className="rounded-2xl bg-surface p-6 shadow-sm dark:border dark:border-border dark:shadow-none">
       <h2 className="text-lg font-semibold text-text-primary mb-1">Profile</h2>
       <p className="text-sm text-text-secondary mb-6">
         Your display name and account email.
@@ -98,7 +98,7 @@ export function ProfileSection() {
 
   if (isLoading) {
     return (
-      <section className="rounded-2xl border border-border bg-surface p-6 shadow-sm dark:shadow-none">
+      <section className="rounded-2xl bg-surface p-6 shadow-sm dark:border dark:border-border dark:shadow-none">
         <h2 className="text-lg font-semibold text-text-primary mb-1">Profile</h2>
         <p className="text-sm text-text-muted">Loading…</p>
       </section>
@@ -107,7 +107,7 @@ export function ProfileSection() {
 
   if (isError || !data) {
     return (
-      <section className="rounded-2xl border border-border bg-surface p-6 shadow-sm dark:shadow-none">
+      <section className="rounded-2xl bg-surface p-6 shadow-sm dark:border dark:border-border dark:shadow-none">
         <h2 className="text-lg font-semibold text-text-primary mb-1">Profile</h2>
         <p className="text-sm text-debit">
           {error instanceof Error ? error.message : "Failed to load profile"}

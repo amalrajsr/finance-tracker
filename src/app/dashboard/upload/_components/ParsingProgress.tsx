@@ -22,7 +22,7 @@ export function ParsingProgress({ progress }: ParsingProgressProps) {
   };
 
   return (
-    <div className="rounded-xl border border-border bg-surface p-6">
+    <div className="rounded-xl bg-surface p-6 shadow-sm dark:border dark:border-border dark:shadow-none">
       {/* Progress bar */}
       <div className="mb-4">
         <div className="flex items-center justify-between mb-2">

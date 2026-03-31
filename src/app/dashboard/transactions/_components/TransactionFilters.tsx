@@ -230,7 +230,7 @@ export function TransactionFilters({
   return (
     <div className="space-y-3">
       {/* Desktop: inline filter panel */}
-      <div className="hidden sm:block p-4 rounded-xl bg-surface border border-border space-y-4">
+      <div className="hidden sm:block p-4 rounded-xl bg-surface shadow-sm dark:border dark:border-border dark:shadow-none space-y-4">
         {filterFields}
       </div>
 

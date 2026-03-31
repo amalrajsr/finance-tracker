@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export function DashboardQuickActions() {
   return (
-    <div className="p-4 rounded-xl border border-border bg-surface shadow-sm dark:shadow-none space-y-3">
+    <div className="p-4 rounded-xl bg-surface shadow-sm dark:border dark:border-border dark:shadow-none space-y-3">
       <h3 className="text-sm font-semibold text-text-primary">Quick actions</h3>
       <ul className="space-y-2">
         <li>

@@ -137,7 +137,7 @@ export function CategorySelect({
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-1 focus:outline-none rounded hover:ring-2 hover:ring-primary/20 transition-all cursor-pointer p-1"
+        className="flex items-center gap-1 focus:outline-none rounded focus-visible:ring-[3px] focus-visible:ring-focus-ring-strong hover:ring-2 hover:ring-primary/20 transition-shadow duration-150 cursor-pointer p-1"
         aria-label="Change category"
         aria-haspopup="listbox"
         aria-expanded={isOpen}
@@ -159,7 +159,7 @@ export function CategorySelect({
       {/* Desktop: popover */}
       {isOpen && !isMobile && (
         <div
-          className="absolute z-10 left-0 mt-1 w-56 bg-surface border border-border shadow-lg rounded-xl overflow-hidden py-1"
+          className="absolute z-10 left-0 mt-1 w-56 bg-surface-raised border border-border-light shadow-lg rounded-xl overflow-hidden py-1 dropdown-scroll"
           role="listbox"
           aria-label="Select category"
         >

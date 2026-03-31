@@ -18,10 +18,10 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
     return (
       <select
         ref={ref}
-        className={`w-full rounded-lg border border-border bg-surface text-text-primary focus:outline-none focus:ring-2 focus:border-transparent transition-colors dark:bg-surface-sunken ${sizeClasses[selectSize]} ${
+        className={`w-full rounded-lg border bg-surface text-text-primary focus:outline-none transition-[border-color,box-shadow] duration-150 dark:bg-surface-sunken ${sizeClasses[selectSize]} ${
           error
-            ? "border-error focus:ring-error/50"
-            : "border-border focus:ring-primary/50"
+            ? "border-error focus:border-error focus:ring-[3px] focus:ring-error/15"
+            : "border-border-light focus:border-border-strong focus:ring-[3px] focus:ring-focus-ring"
         } ${className}`}
         {...props}
       >

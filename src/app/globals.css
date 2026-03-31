@@ -1,61 +1,63 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Semantic tokens — light (default) */
+/* Semantic tokens — light (default) · "Parchment & Ink" */
 :root {
  /* ── Primary / Brand ──────────────────────────────────────── */
- --app-primary:             #2C2825;
- --app-primary-hover:       #1A1614;
- --app-primary-light:       #DEDAD6;
- --app-primary-subtle:      #E8E4DF;    /* ultra-light tint for tags, chips */
+ --app-primary:             #1B1510;    /* deep ink */
+ --app-primary-hover:       #0E0A07;
+ --app-primary-light:       #EDE8DF;    /* warm parchment wash */
+ --app-primary-subtle:      #E3DDD4;    /* ultra-light tint for tags, chips */
 
  /* ── Surfaces ─────────────────────────────────────────────── */
- --app-background:          #F2F0EE;    /* page / canvas */
- --app-surface:             #FFFFFF;    /* cards, modals, sheets */
- --app-surface-raised:      #FFFFFF;    /* elevated cards (same in light) */
- --app-surface-sunken:      #EBE8E4;   /* inset areas, input backgrounds */
- --app-surface-overlay:     rgba(28, 28, 28, 0.45);  /* modal backdrop */
+ --app-background:          #F6F3ED;    /* warm paper canvas */
+ --app-surface:             #FFFDF9;    /* off-white cards */
+ --app-surface-raised:      #FFFFFF;    /* elevated cards, popovers */
+ --app-surface-sunken:      #EDEAD4;    /* inset areas, input backgrounds */
+ --app-surface-overlay:     rgba(27, 21, 16, 0.40);  /* modal backdrop */
 
  /* ── Borders ──────────────────────────────────────────────── */
- --app-border:              #C2BDB8;    /* default */
- --app-border-light:        #DDD9D3;    /* subtle dividers */
- --app-border-strong:       #A39E98;    /* emphasis, focused inputs */
+ --app-border:              #D6D0C8;    /* default — lighter, less boxy */
+ --app-border-light:        #E5E0D8;    /* subtle dividers */
+ --app-border-strong:       #B5AFA6;    /* emphasis, focused inputs */
 
  /* ── Text ─────────────────────────────────────────────────── */
- --app-text-primary:        #1C1C1C;
- --app-text-secondary:      #7A7370;
- --app-text-muted:          #9A9590;
- --app-text-disabled:       #BDB8B3;
- --app-text-inverse:        #F2F0EE;    /* text on dark fills */
- --app-text-on-primary:     #F2F0EE;    /* text on --app-primary bg */
+ --app-text-primary:        #1B1510;
+ --app-text-secondary:      #74685E;
+ --app-text-muted:          #9A8E84;
+ --app-text-disabled:       #C4BBB0;
+ --app-text-inverse:        #F6F3ED;    /* text on dark fills */
+ --app-text-on-primary:     #F6F3ED;    /* text on --app-primary bg */
 
  /* ── Credit (income / positive) ───────────────────────────── */
- --app-credit:              #1A5C38;
- --app-credit-light:        #EAF2EB;
- --app-credit-subtle:       #D5E8D8;    /* slightly stronger tint */
- --app-credit-text:         #1A5C38;    /* text color on credit-light bg */
+ --app-credit:              #2D6A4F;    /* richer forest green */
+ --app-credit-light:        #E8F1EB;
+ --app-credit-subtle:       #D0E4D5;    /* slightly stronger tint */
+ --app-credit-text:         #2D6A4F;    /* text color on credit-light bg */
 
  /* ── Debit (expense / negative) ───────────────────────────── */
- --app-debit:               #B83225;
- --app-debit-light:         #F7EAE8;
- --app-debit-subtle:        #F0D5D1;
- --app-debit-text:          #B83225;
+ --app-debit:               #9B2C2C;    /* brick red, less alarming */
+ --app-debit-light:         #F5E8E8;
+ --app-debit-subtle:        #ECD2D0;
+ --app-debit-text:          #9B2C2C;
 
  /* ── Error ────────────────────────────────────────────────── */
- --app-error:               #B83225;
- --app-error-light:         #F7EAE8;
- --app-error-text:          #B83225;
+ --app-error:               #9B2C2C;
+ --app-error-light:         #F5E8E8;
+ --app-error-text:          #9B2C2C;
 
  /* ── Success ──────────────────────────────────────────────── */
- --app-success:             #1A5C38;
- --app-success-light:       #EAF2EB;
- --app-success-text:        #1A5C38;
+ --app-success:             #2D6A4F;
+ --app-success-light:       #E8F1EB;
+ --app-success-text:        #2D6A4F;
 
  /* ── Warning ──────────────────────────────────────────────── */
- --app-warning:             #B5862A;
- --app-warning-light:       #F5EDD8;
- --app-warning-text:        #8A6420;    /* darkened for contrast on light bg */
+ --app-warning:             #A47A28;
+ --app-warning-light:       #F3EBD6;
+ --app-warning-text:        #7D5E1E;    /* darkened for contrast on light bg */
 
  /* ── Info ──────────────────────────────────────────────────── */
  --app-info:                #4A7A9B;
@@ -63,32 +65,33 @@
  --app-info-text:           #3A6280;
 
  /* ── Chart ────────────────────────────────────────────────── */
- --app-chart-grid:          #D8D4CF;
- --app-chart-tick:          #7A7370;
- --app-chart-cursor:        #EDEAE3;
- --app-chart-tooltip-bg:    #FFFFFF;
- --app-chart-tooltip-border:#C2BDB8;
- --app-chart-tooltip-text:  #1C1C1C;
+ --app-chart-grid:          #DDD8D0;
+ --app-chart-tick:          #74685E;
+ --app-chart-cursor:        #EDE8DF;
+ --app-chart-tooltip-bg:    #FFFDF9;
+ --app-chart-tooltip-border:#D6D0C8;
+ --app-chart-tooltip-text:  #1B1510;
 
- /* Chart category palette — 6 stops, warm-first
+ /* Chart category palette — 6 stops, warm muted
     Use in order for donut/bar segments */
- --app-chart-1:             #2C2825;    /* primary (largest category) */
- --app-chart-2:             #8B6B4A;    /* umber */
- --app-chart-3:             #B5862A;    /* amber/warning */
- --app-chart-4:             #7A9A6D;    /* sage green */
- --app-chart-5:             #A3817A;    /* dusty rose */
- --app-chart-6:             #6B8E9B;    /* muted teal */
+ --app-chart-1:             #1B1510;    /* ink (largest category) */
+ --app-chart-2:             #7C6650;    /* warm umber */
+ --app-chart-3:             #A4845C;    /* aged gold */
+ --app-chart-4:             #6B8F71;    /* sage */
+ --app-chart-5:             #9C7178;    /* dusty rose */
+ --app-chart-6:             #5E7F8A;    /* muted teal */
 
  /* ── Interactive States ───────────────────────────────────── */
- --app-focus-ring:          rgba(44, 40, 37, 0.4);
- --app-hover-overlay:       rgba(44, 40, 37, 0.04);
- --app-active-overlay:      rgba(44, 40, 37, 0.08);
- --app-selected-bg:         #EBE8E4;
- --app-selected-border:     #2C2825;
+ --app-focus-ring:          rgba(27, 21, 16, 0.18);
+ --app-focus-ring-strong:   rgba(27, 21, 16, 0.35);
+ --app-hover-overlay:       rgba(27, 21, 16, 0.04);
+ --app-active-overlay:      rgba(27, 21, 16, 0.08);
+ --app-selected-bg:         #EDE8DF;
+ --app-selected-border:     #1B1510;
 
  /* ── Skeleton / Loading ───────────────────────────────────── */
- --app-skeleton-base:       #E8E4DF;
- --app-skeleton-shimmer:    #F2F0EE;
+ --app-skeleton-base:       #E3DDD4;
+ --app-skeleton-shimmer:    #F6F3ED;
 
  /* ── Radius ───────────────────────────────────────────────── */
  --app-radius-sm:           4px;
@@ -97,10 +100,10 @@
  --app-radius-xl:           16px;
  --app-radius-full:         9999px;
 
- /* ── Shadows (light mode only — dark uses borders) ────────── */
- --app-shadow-sm:           0 1px 2px rgba(28, 28, 28, 0.06);
- --app-shadow-md:           0 2px 8px rgba(28, 28, 28, 0.08);
- --app-shadow-lg:           0 4px 16px rgba(28, 28, 28, 0.10);
+ /* ── Shadows (light mode — soft warm) ─────────────────────── */
+ --app-shadow-sm:           0 1px 3px rgba(27, 21, 16, 0.06), 0 1px 2px rgba(27, 21, 16, 0.04);
+ --app-shadow-md:           0 3px 10px rgba(27, 21, 16, 0.07), 0 1px 3px rgba(27, 21, 16, 0.04);
+ --app-shadow-lg:           0 6px 20px rgba(27, 21, 16, 0.09), 0 2px 6px rgba(27, 21, 16, 0.04);
 
  /* ── Typography ───────────────────────────────────────────── */
  --app-font-sans:           system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -108,98 +111,162 @@
  --app-line-height:         1.5;
  --app-line-height-tight:   1.3;
  --app-line-height-loose:   1.7;
+ --background:             oklch(1 0 0);
+ --foreground:             oklch(0.145 0 0);
+ --card:             oklch(1 0 0);
+ --card-foreground:             oklch(0.145 0 0);
+ --popover:             oklch(1 0 0);
+ --popover-foreground:             oklch(0.145 0 0);
+ --primary:             oklch(0.205 0 0);
+ --primary-foreground:             oklch(0.985 0 0);
+ --secondary:             oklch(0.97 0 0);
+ --secondary-foreground:             oklch(0.205 0 0);
+ --muted:             oklch(0.97 0 0);
+ --muted-foreground:             oklch(0.556 0 0);
+ --accent:             oklch(0.97 0 0);
+ --accent-foreground:             oklch(0.205 0 0);
+ --destructive:             oklch(0.577 0.245 27.325);
+ --border:             oklch(0.922 0 0);
+ --input:             oklch(0.922 0 0);
+ --ring:             oklch(0.708 0 0);
+ --chart-1:             oklch(0.87 0 0);
+ --chart-2:             oklch(0.556 0 0);
+ --chart-3:             oklch(0.439 0 0);
+ --chart-4:             oklch(0.371 0 0);
+ --chart-5:             oklch(0.269 0 0);
+ --radius:             0.625rem;
+ --sidebar:             oklch(0.985 0 0);
+ --sidebar-foreground:             oklch(0.145 0 0);
+ --sidebar-primary:             oklch(0.205 0 0);
+ --sidebar-primary-foreground:             oklch(0.985 0 0);
+ --sidebar-accent:             oklch(0.97 0 0);
+ --sidebar-accent-foreground:             oklch(0.205 0 0);
+ --sidebar-border:             oklch(0.922 0 0);
+ --sidebar-ring:             oklch(0.708 0 0);
 }
 
 .dark {
- 
+
   /* ── Primary / Brand ──────────────────────────────────────── */
-  --app-primary:             #E8E3DC;    /* inverted: light on dark */
-  --app-primary-hover:       #F5F2ED;
-  --app-primary-light:       #332F29;    /* muted dark fill */
-  --app-primary-subtle:      #2A2621;
- 
+  --app-primary:             #DDD5C9;    /* parchment on dark */
+  --app-primary-hover:       #EDE8DF;
+  --app-primary-light:       #302A22;    /* muted dark fill */
+  --app-primary-subtle:      #272119;
+
   /* ── Surfaces ─────────────────────────────────────────────── */
-  --app-background:          #1F1C19;    /* warm vault base */
-  --app-surface:             #28241F;    /* cards */
-  --app-surface-raised:      #302B25;    /* elevated cards, popovers */
-  --app-surface-sunken:      #1A1714;    /* inset areas */
+  --app-background:          #171411;    /* deeper vault base */
+  --app-surface:             #1E1B17;    /* cards */
+  --app-surface-raised:      #272219;    /* elevated cards, popovers */
+  --app-surface-sunken:      #121010;    /* inset areas */
   --app-surface-overlay:     rgba(0, 0, 0, 0.55);
- 
+
   /* ── Borders ──────────────────────────────────────────────── */
-  --app-border:              #3D3730;
-  --app-border-light:        #332F29;
-  --app-border-strong:       #534C43;
- 
+  --app-border:              #332E26;
+  --app-border-light:        #2A2620;
+  --app-border-strong:       #4A4338;
+
   /* ── Text ─────────────────────────────────────────────────── */
-  --app-text-primary:        #E8E3DC;
-  --app-text-secondary:      #A89A8E;
-  --app-text-muted:          #7A7370;
-  --app-text-disabled:       #534C43;
-  --app-text-inverse:        #1F1C19;
-  --app-text-on-primary:     #1F1C19;
- 
+  --app-text-primary:        #DDD5C9;
+  --app-text-secondary:      #A49585;
+  --app-text-muted:          #756A60;
+  --app-text-disabled:       #4A4338;
+  --app-text-inverse:        #171411;
+  --app-text-on-primary:     #171411;
+
   /* ── Credit ───────────────────────────────────────────────── */
-  --app-credit:              #5CB87A;
-  --app-credit-light:        rgba(92, 184, 122, 0.12);
-  --app-credit-subtle:       rgba(92, 184, 122, 0.08);
-  --app-credit-text:         #5CB87A;
- 
+  --app-credit:              #6ECF8A;    /* bumped luminance for dark bg */
+  --app-credit-light:        rgba(110, 207, 138, 0.12);
+  --app-credit-subtle:       rgba(110, 207, 138, 0.08);
+  --app-credit-text:         #6ECF8A;
+
   /* ── Debit ────────────────────────────────────────────────── */
-  --app-debit:               #E06B5E;
-  --app-debit-light:         rgba(224, 107, 94, 0.12);
-  --app-debit-subtle:        rgba(224, 107, 94, 0.08);
-  --app-debit-text:          #E06B5E;
- 
+  --app-debit:               #D4736A;    /* burnished, less neon */
+  --app-debit-light:         rgba(212, 115, 106, 0.12);
+  --app-debit-subtle:        rgba(212, 115, 106, 0.08);
+  --app-debit-text:          #D4736A;
+
   /* ── Error ────────────────────────────────────────────────── */
-  --app-error:               #E06B5E;
-  --app-error-light:         rgba(224, 107, 94, 0.12);
-  --app-error-text:          #E06B5E;
- 
+  --app-error:               #D4736A;
+  --app-error-light:         rgba(212, 115, 106, 0.12);
+  --app-error-text:          #D4736A;
+
   /* ── Success ──────────────────────────────────────────────── */
-  --app-success:             #5CB87A;
-  --app-success-light:       rgba(92, 184, 122, 0.12);
-  --app-success-text:        #5CB87A;
- 
+  --app-success:             #6ECF8A;
+  --app-success-light:       rgba(110, 207, 138, 0.12);
+  --app-success-text:        #6ECF8A;
+
   /* ── Warning ──────────────────────────────────────────────── */
   --app-warning:             #D4A94E;
   --app-warning-light:       rgba(212, 169, 78, 0.12);
   --app-warning-text:        #D4A94E;
- 
+
   /* ── Info ──────────────────────────────────────────────────── */
   --app-info:                #7AACCC;
   --app-info-light:          rgba(122, 172, 204, 0.12);
   --app-info-text:           #7AACCC;
- 
+
   /* ── Chart ────────────────────────────────────────────────── */
-  --app-chart-grid:          #332F29;
-  --app-chart-tick:          #7A7370;
-  --app-chart-cursor:        #2A2621;
-  --app-chart-tooltip-bg:    #302B25;
-  --app-chart-tooltip-border:#3D3730;
-  --app-chart-tooltip-text:  #E8E3DC;
- 
-  --app-chart-1:             #E8E3DC;
+  --app-chart-grid:          #2A2620;
+  --app-chart-tick:          #756A60;
+  --app-chart-cursor:        #272119;
+  --app-chart-tooltip-bg:    #272219;
+  --app-chart-tooltip-border:#332E26;
+  --app-chart-tooltip-text:  #DDD5C9;
+
+  --app-chart-1:             #DDD5C9;
   --app-chart-2:             #C4A87E;
   --app-chart-3:             #D4A94E;
   --app-chart-4:             #8EBF7F;
   --app-chart-5:             #C9A098;
   --app-chart-6:             #7AACCC;
- 
+
   /* ── Interactive States ───────────────────────────────────── */
-  --app-focus-ring:          rgba(232, 227, 220, 0.35);
-  --app-hover-overlay:       rgba(232, 227, 220, 0.05);
-  --app-active-overlay:      rgba(232, 227, 220, 0.10);
-  --app-selected-bg:         #332F29;
-  --app-selected-border:     #E8E3DC;
- 
+  --app-focus-ring:          rgba(221, 213, 201, 0.20);
+  --app-focus-ring-strong:   rgba(221, 213, 201, 0.40);
+  --app-hover-overlay:       rgba(221, 213, 201, 0.05);
+  --app-active-overlay:      rgba(221, 213, 201, 0.10);
+  --app-selected-bg:         #302A22;
+  --app-selected-border:     #DDD5C9;
+
   /* ── Skeleton / Loading ───────────────────────────────────── */
-  --app-skeleton-base:       #2A2621;
-  --app-skeleton-shimmer:    #332F29;
- 
-  /* ── Shadows (dark mode: none — use borders instead) ─────── */
-  --app-shadow-sm:           none;
-  --app-shadow-md:           none;
-  --app-shadow-lg:           none;
+  --app-skeleton-base:       #272119;
+  --app-skeleton-shimmer:    #302A22;
+
+  /* ── Shadows (dark mode: subtle warm glow) ───────────────── */
+  --app-shadow-sm:           0 1px 3px rgba(0, 0, 0, 0.25);
+  --app-shadow-md:           0 3px 10px rgba(0, 0, 0, 0.30);
+  --app-shadow-lg:           0 6px 20px rgba(0, 0, 0, 0.35);
+  --background:             oklch(0.145 0 0);
+  --foreground:             oklch(0.985 0 0);
+  --card:             oklch(0.205 0 0);
+  --card-foreground:             oklch(0.985 0 0);
+  --popover:             oklch(0.205 0 0);
+  --popover-foreground:             oklch(0.985 0 0);
+  --primary:             oklch(0.922 0 0);
+  --primary-foreground:             oklch(0.205 0 0);
+  --secondary:             oklch(0.269 0 0);
+  --secondary-foreground:             oklch(0.985 0 0);
+  --muted:             oklch(0.269 0 0);
+  --muted-foreground:             oklch(0.708 0 0);
+  --accent:             oklch(0.269 0 0);
+  --accent-foreground:             oklch(0.985 0 0);
+  --destructive:             oklch(0.704 0.191 22.216);
+  --border:             oklch(1 0 0 / 10%);
+  --input:             oklch(1 0 0 / 15%);
+  --ring:             oklch(0.556 0 0);
+  --chart-1:             oklch(0.87 0 0);
+  --chart-2:             oklch(0.556 0 0);
+  --chart-3:             oklch(0.439 0 0);
+  --chart-4:             oklch(0.371 0 0);
+  --chart-5:             oklch(0.269 0 0);
+  --sidebar:             oklch(0.205 0 0);
+  --sidebar-foreground:             oklch(0.985 0 0);
+  --sidebar-primary:             oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground:             oklch(0.985 0 0);
+  --sidebar-accent:             oklch(0.269 0 0);
+  --sidebar-accent-foreground:             oklch(0.985 0 0);
+  --sidebar-border:             oklch(1 0 0 / 10%);
+  --sidebar-ring:             oklch(0.556 0 0);
 
 }
 
@@ -231,9 +298,47 @@
   --color-text-on-primary: var(--app-text-on-primary);
   --color-text-disabled: var(--app-text-disabled);
   --color-primary-subtle: var(--app-primary-subtle);
-  --font-sans: var(--font-inter, "Inter"), sans-serif;
+  --color-focus-ring: var(--app-focus-ring);
+  --color-focus-ring-strong: var(--app-focus-ring-strong);
+  --font-sans:             var(--font-sans);
   --font-mono: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace,
     monospace;
+  --font-heading:             var(--font-sans);
+  --color-sidebar-ring:             var(--sidebar-ring);
+  --color-sidebar-border:             var(--sidebar-border);
+  --color-sidebar-accent-foreground:             var(--sidebar-accent-foreground);
+  --color-sidebar-accent:             var(--sidebar-accent);
+  --color-sidebar-primary-foreground:             var(--sidebar-primary-foreground);
+  --color-sidebar-primary:             var(--sidebar-primary);
+  --color-sidebar-foreground:             var(--sidebar-foreground);
+  --color-sidebar:             var(--sidebar);
+  --color-chart-5:             var(--chart-5);
+  --color-chart-4:             var(--chart-4);
+  --color-chart-3:             var(--chart-3);
+  --color-chart-2:             var(--chart-2);
+  --color-chart-1:             var(--chart-1);
+  --color-ring:             var(--ring);
+  --color-input:             var(--input);
+  --color-destructive:             var(--destructive);
+  --color-accent-foreground:             var(--accent-foreground);
+  --color-accent:             var(--accent);
+  --color-muted-foreground:             var(--muted-foreground);
+  --color-muted:             var(--muted);
+  --color-secondary-foreground:             var(--secondary-foreground);
+  --color-secondary:             var(--secondary);
+  --color-primary-foreground:             var(--primary-foreground);
+  --color-popover-foreground:             var(--popover-foreground);
+  --color-popover:             var(--popover);
+  --color-card-foreground:             var(--card-foreground);
+  --color-card:             var(--card);
+  --color-foreground:             var(--foreground);
+  --radius-sm:             calc(var(--radius) * 0.6);
+  --radius-md:             calc(var(--radius) * 0.8);
+  --radius-lg:             var(--radius);
+  --radius-xl:             calc(var(--radius) * 1.4);
+  --radius-2xl:             calc(var(--radius) * 1.8);
+  --radius-3xl:             calc(var(--radius) * 2.2);
+  --radius-4xl:             calc(var(--radius) * 2.6);
 }
 
 body {
@@ -248,13 +353,71 @@ body {
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
-/* Card surface: stronger separation from page background */
+/* Card surface: shadow-lifted, borderless in light — bordered in dark */
 .card-surface {
   background-color: var(--app-surface);
-  border: 1px solid var(--app-border);
   border-radius: 0.75rem;
+  box-shadow: var(--app-shadow-sm);
 }
 
 .dark .card-surface {
-  background-color: color-mix(in srgb, var(--app-surface) 92%, transparent);
+  background-color: var(--app-surface);
+  border: 1px solid var(--app-border);
+  box-shadow: none;
+}
+
+/* ── Custom date input styling ─────────────────────────────── */
+input[type="date"] {
+  position: relative;
+  color-scheme: light;
+}
+
+.dark input[type="date"] {
+  color-scheme: dark;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 2px;
+  opacity: 0.6;
+  transition: opacity 0.15s ease;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+input[type="date"]:focus::-webkit-calendar-picker-indicator {
+  opacity: 1;
+}
+
+/* ── Scrollbar styling for dropdowns ───────────────────────── */
+.dropdown-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dropdown-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.dropdown-scroll::-webkit-scrollbar-thumb {
+  background-color: var(--app-border);
+  border-radius: 3px;
+}
+
+.dropdown-scroll::-webkit-scrollbar-thumb:hover {
+  background-color: var(--app-border-strong);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+ }
+  body {
+    @apply bg-background text-foreground;
+ }
+  html {
+    @apply font-sans;
+ }
 }

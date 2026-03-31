@@ -161,7 +161,7 @@ export default async function DashboardPage() {
                 />
               </div>
 
-              <div className="p-4 rounded-xl border border-border bg-surface shadow-sm dark:shadow-none flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <div className="p-4 rounded-xl bg-surface shadow-sm dark:border dark:border-border dark:shadow-none flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <div>
                   <p className="text-xs font-medium text-text-secondary uppercase tracking-wider">
                     {monthName} net change
@@ -185,14 +185,14 @@ export default async function DashboardPage() {
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                <div className="p-4 rounded-xl border border-border bg-surface shadow-sm dark:shadow-none">
+                <div className="p-4 rounded-xl bg-surface shadow-sm dark:border dark:border-border dark:shadow-none">
                   <h3 className="text-sm font-semibold text-text-primary mb-3">
                     Income / expense trend (6 months)
                   </h3>
                   <MonthlyTrendChart data={analytics.monthlyTrend} />
                 </div>
 
-                <div className="p-4 rounded-xl border border-border bg-surface shadow-sm dark:shadow-none">
+                <div className="p-4 rounded-xl bg-surface shadow-sm dark:border dark:border-border dark:shadow-none">
                   <h3 className="text-sm font-semibold text-text-primary mb-3">
                     Category breakdown
                   </h3>
@@ -200,7 +200,7 @@ export default async function DashboardPage() {
                 </div>
               </div>
 
-              <div className="p-4 rounded-xl border border-border bg-surface shadow-sm dark:shadow-none">
+              <div className="p-4 rounded-xl bg-surface shadow-sm dark:border dark:border-border dark:shadow-none">
                 <h3 className="text-sm font-semibold text-text-primary mb-3">
                   Daily spending (last 30 days)
                 </h3>
@@ -209,7 +209,7 @@ export default async function DashboardPage() {
             </div>
 
             <aside className="space-y-4 mt-4 xl:mt-0 xl:col-span-1">
-              <div className="p-4 rounded-xl border border-border bg-surface shadow-sm dark:shadow-none">
+              <div className="p-4 rounded-xl bg-surface shadow-sm dark:border dark:border-border dark:shadow-none">
                 <h3 className="text-sm font-semibold text-text-primary mb-3">
                   Top spending destinations
                 </h3>
@@ -269,7 +269,7 @@ function StatCard({
   hint?: string;
 }) {
   return (
-    <div className="p-3 sm:p-4 rounded-xl border border-border bg-surface shadow-sm dark:shadow-none flex gap-3 items-start min-w-0">
+    <div className="p-3 sm:p-4 rounded-xl bg-surface shadow-sm dark:border dark:border-border dark:shadow-none flex gap-3 items-start min-w-0">
       <div className="shrink-0 w-10 h-10 rounded-lg bg-primary-light flex items-center justify-center text-primary">
         {icon}
       </div>

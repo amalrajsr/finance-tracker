@@ -28,7 +28,7 @@ export function DangerZone() {
           Irreversible actions for your session and data.
         </p>
         <ul className="space-y-4">
-          <li className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between rounded-xl border border-border bg-surface p-4">
+          <li className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between rounded-xl border border-border-light bg-surface p-4">
             <div>
               <p className="font-medium text-text-primary">Log out</p>
               <p className="text-sm text-text-secondary">
@@ -43,7 +43,7 @@ export function DangerZone() {
               Log out
             </Button>
           </li>
-          <li className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between rounded-xl border border-border bg-surface p-4">
+          <li className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between rounded-xl border border-border-light bg-surface p-4">
             <div>
               <p className="font-medium text-text-primary">Clear all data</p>
               <p className="text-sm text-text-secondary">

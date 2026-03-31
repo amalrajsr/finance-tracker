@@ -31,7 +31,7 @@ export function PasswordInput({
           onChange={(e) => onChange(e.target.value)}
           disabled={disabled}
           placeholder="Enter statement password"
-          className="w-full h-11 min-h-[44px] pl-3 pr-12 rounded-lg border border-border bg-surface text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full h-11 min-h-[44px] pl-3 pr-12 rounded-lg border border-border bg-surface text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-focus-ring-strong focus:border-border-strong transition-shadow disabled:opacity-50 disabled:cursor-not-allowed"
         />
         <button
           type="button"

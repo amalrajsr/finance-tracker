@@ -33,7 +33,7 @@ export function CategoryDropdown({ value, onChange, categories }: CategoryDropdo
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between px-3 py-2.5 text-sm border border-border rounded-lg bg-background hover:bg-surface focus:outline-none focus:ring-1 focus:ring-primary transition-colors"
+        className="w-full flex items-center justify-between px-3 py-2.5 text-sm border border-border-light rounded-lg bg-surface hover:bg-surface-raised focus:outline-none focus:border-border-strong focus:ring-[3px] focus:ring-focus-ring transition-[border-color,box-shadow] duration-150"
       >
         {selectedCategory ? (
           <CategoryBadge {...selectedCategory} />
@@ -52,7 +52,7 @@ export function CategoryDropdown({ value, onChange, categories }: CategoryDropdo
       </button>
 
       {isOpen && (
-        <div className="absolute z-10 left-0 w-full mt-1 bg-surface border border-border shadow-lg rounded-xl overflow-hidden py-1 max-h-60 overflow-y-auto">
+        <div className="absolute z-10 left-0 w-full mt-1 bg-surface-raised border border-border-light shadow-lg rounded-xl overflow-hidden py-1 max-h-60 overflow-y-auto dropdown-scroll">
           <button
             type="button"
             onClick={() => { onChange(null); setIsOpen(false); }}
