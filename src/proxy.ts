@@ -12,7 +12,9 @@ export function proxy(request: NextRequest) {
   const isLoggedIn = !!sessionToken;
 
   const isAuthRoute =
-    pathname.startsWith("/login") || pathname.startsWith("/signup");
+    pathname.startsWith("/login") ||
+    pathname.startsWith("/signup") ||
+    pathname.startsWith("/verify-email");
 
   // Redirect logged-in users away from auth pages
   if (isAuthRoute && isLoggedIn) {
@@ -28,5 +30,5 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/login", "/signup"],
+  matcher: ["/dashboard/:path*", "/login", "/signup", "/verify-email"],
 };

@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { db } from "@/lib/db";
+import { generateOtp, hashOtp, getOtpExpiryDate } from "@/lib/otp";
+import { sendOtpEmail } from "@/lib/email";
 
 const signupSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -27,11 +29,19 @@ export async function POST(request: Request) {
       where: { email: normalizedEmail },
     });
 
-    if (existingUser) {
+    if (existingUser && existingUser.emailVerified) {
       return NextResponse.json(
         { error: "An account with this email already exists" },
         { status: 409 },
       );
+    }
+
+    // Delete unverified user and their tokens if re-registering
+    if (existingUser && !existingUser.emailVerified) {
+      await db.verificationToken.deleteMany({
+        where: { email: normalizedEmail },
+      });
+      await db.user.delete({ where: { id: existingUser.id } });
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
@@ -43,8 +53,23 @@ export async function POST(request: Request) {
       },
     });
 
+    // Generate and store OTP
+    const otp = generateOtp();
+    const hashedToken = await hashOtp(otp);
+
+    await db.verificationToken.create({
+      data: {
+        email: normalizedEmail,
+        token: hashedToken,
+        expiresAt: getOtpExpiryDate(),
+      },
+    });
+
+    // Send OTP email
+    await sendOtpEmail(normalizedEmail, otp);
+
     return NextResponse.json(
-      { message: "Account created successfully" },
+      { message: "Verification email sent", requiresVerification: true },
       { status: 201 },
     );
   } catch {

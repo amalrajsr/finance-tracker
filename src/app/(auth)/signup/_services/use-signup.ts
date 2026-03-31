@@ -1,14 +1,18 @@
 import { useMutation } from "@tanstack/react-query";
-import { signIn } from "next-auth/react";
 
 interface SignupVariables {
   email: string;
   password: string;
 }
 
+interface SignupResponse {
+  requiresVerification: true;
+  email: string;
+}
+
 export function useSignup() {
   return useMutation({
-    mutationFn: async ({ email, password }: SignupVariables) => {
+    mutationFn: async ({ email, password }: SignupVariables): Promise<SignupResponse> => {
       const res = await fetch("/api/auth/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -21,18 +25,7 @@ export function useSignup() {
         throw new Error(data.error || "Failed to create account");
       }
 
-      // Auto sign-in after successful signup
-      const result = await signIn("credentials", {
-        email,
-        password,
-        redirect: false,
-      });
-
-      if (result?.error) {
-        throw new Error("Account created but sign-in failed — please login manually.");
-      }
-
-      return result;
+      return { requiresVerification: true, email };
     },
   });
 }

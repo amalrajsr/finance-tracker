@@ -36,12 +36,10 @@ export default function SignupPage() {
 
     try {
       await signup({ email, password });
-      router.push("/dashboard");
-      router.refresh();
-    } catch (err) {
-      if (err instanceof Error && err.message.includes("login manually")) {
-        router.push("/login");
-      }
+      sessionStorage.setItem("__fn_signup_pw", password);
+      router.push(`/verify-email?email=${encodeURIComponent(email)}`);
+    } catch {
+      // Error is stored in mutationError
     }
   }
 

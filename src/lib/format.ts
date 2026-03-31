@@ -21,3 +21,12 @@ export function formatDate(value: string | Date): string {
     year: "numeric",
   });
 }
+
+/**
+ * Mask an email for display: "john.doe@example.com" → "j*****e@example.com"
+ */
+export function maskEmail(email: string): string {
+  const [local, domain] = email.split("@");
+  if (!domain || local.length <= 2) return email;
+  return `${local[0]}${"*".repeat(local.length - 2)}${local[local.length - 1]}@${domain}`;
+}

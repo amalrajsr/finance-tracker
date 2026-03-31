@@ -4,6 +4,7 @@ import { Inter, JetBrains_Mono, Geist } from "next/font/google";
 import "./globals.css";
 import { QueryProvider } from "@/components/providers/query-provider";
 import { ThemeProvider } from "@/components/providers/theme-provider";
+import { ToastProvider } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
@@ -51,7 +52,9 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: themeInit }}
         />
         <ThemeProvider>
-          <QueryProvider>{children}</QueryProvider>
+          <QueryProvider>
+            <ToastProvider>{children}</ToastProvider>
+          </QueryProvider>
         </ThemeProvider>
       </body>
     </html>

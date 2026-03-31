@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { ToastProvider } from "@/hooks/use-toast";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { useEffect, useState } from "react";
@@ -181,8 +180,7 @@ export function AppShell({ children, userEmail, userName }: AppShellProps) {
       : "md:ml-16";
 
   return (
-    <ToastProvider>
-      <div className="min-h-screen bg-background w-full">
+    <div className="min-h-screen bg-background w-full">
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-60 focus:px-4 focus:py-2 focus:bg-primary focus:text-white focus:rounded-lg focus:text-sm focus:font-medium"
@@ -338,6 +336,5 @@ export function AppShell({ children, userEmail, userName }: AppShellProps) {
           ))}
         </nav>
       </div>
-    </ToastProvider>
   );
 }

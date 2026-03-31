@@ -25,6 +25,7 @@ export const federalParser: BankParser = {
     const joined = textLines.join(" ").toLowerCase();
     if (
       joined.includes("federalbank.co.in") ||
+      joined.includes("federal.bank.in") ||
       joined.includes("the federal bank")
     ) {
       return true;
@@ -39,8 +40,8 @@ export const federalParser: BankParser = {
       hasTranType &&
       hasTranId &&
       hasDrCr &&
-      joined.includes("withdrawals") &&
-      joined.includes("deposits")
+      joined.includes("withdrawal") &&
+      joined.includes("deposit")
     ) {
       return true;
     }
@@ -49,8 +50,8 @@ export const federalParser: BankParser = {
       hasParticulars &&
       hasTranType &&
       hasTranId &&
-      joined.includes("withdrawals") &&
-      joined.includes("deposits") &&
+      joined.includes("withdrawal") &&
+      joined.includes("deposit") &&
       joined.includes("balance")
     ) {
       return true;
@@ -61,8 +62,9 @@ export const federalParser: BankParser = {
   parse(textLines: string[]): ParserResult {
     const transactions: ParsedTransaction[] = [];
     const errors: ParserError[] = [];
-
+    
     const headerIndex = findHeaderRow(textLines);
+  
     if (headerIndex === -1) {
       return {
         success: false,
@@ -98,6 +100,7 @@ export const federalParser: BankParser = {
     for (let i = headerIndex + 1; i < textLines.length; i++) {
       const line = textLines[i].trim();
       if (!line || isFooterLine(line)) continue;
+      if (isHeaderLine(line)) continue;
 
       if (isStatementEnd(line)) break;
 
@@ -159,6 +162,10 @@ export const federalParser: BankParser = {
 const FEDERAL_DATE_PREFIX =
   /^(\d{1,2}-[A-Z]{3}-\d{4})\s+(\d{1,2}-[A-Z]{3}-\d{4})\s+/i;
 
+/** Email-format dates: DD/MM/YYYY DD/MM/YYYY */
+const FEDERAL_DATE_PREFIX_SLASH =
+  /^(\d{2}\/\d{2}\/\d{4})\s+(\d{2}\/\d{2}\/\d{4})\s+/;
+
 const MONTHS: Record<string, string> = {
   jan: "01",
   feb: "02",
@@ -177,14 +184,24 @@ const MONTHS: Record<string, string> = {
 /** Matches decimal amounts like 1,234.56 or 150.00 */
 const AMOUNT_TOKEN = /[\d,]+\.\d{2}/g;
 
+function isHeaderLine(line: string): boolean {
+  const lower = line.toLowerCase();
+  return (
+    lower.includes("date") &&
+    lower.includes("particulars") &&
+    lower.includes("withdrawal") &&
+    lower.includes("balance")
+  );
+}
+
 function findHeaderRow(lines: string[]): number {
   for (let i = 0; i < lines.length; i++) {
     const lower = lines[i].toLowerCase();
     if (
       lower.includes("date") &&
       lower.includes("particulars") &&
-      lower.includes("withdrawals") &&
-      lower.includes("deposits") &&
+      lower.includes("withdrawal") &&
+      lower.includes("deposit") &&
       lower.includes("balance") &&
       (lower.includes("tran type") || lower.includes("tran id"))
     ) {
@@ -195,16 +212,27 @@ function findHeaderRow(lines: string[]): number {
 }
 
 function parseFederalDate(dateStr: string): string | null {
-  const m = dateStr.match(/^(\d{1,2})-([A-Za-z]{3})-(\d{4})$/);
-  if (!m) return null;
-  const mon = MONTHS[m[2].toLowerCase()];
-  if (!mon) return null;
-  const day = parseInt(m[1], 10);
-  const year = parseInt(m[3], 10);
-  if (Number.isNaN(day) || Number.isNaN(year) || day < 1 || day > 31) {
-    return null;
+  // DD-MMM-YYYY (app-downloaded format)
+  const m1 = dateStr.match(/^(\d{1,2})-([A-Za-z]{3})-(\d{4})$/);
+  if (m1) {
+    const mon = MONTHS[m1[2].toLowerCase()];
+    if (!mon) return null;
+    const day = parseInt(m1[1], 10);
+    const year = parseInt(m1[3], 10);
+    if (Number.isNaN(day) || Number.isNaN(year) || day < 1 || day > 31)
+      return null;
+    return `${year}-${mon}-${String(day).padStart(2, "0")}`;
   }
-  return `${year}-${mon}-${String(day).padStart(2, "0")}`;
+  // DD/MM/YYYY (email format)
+  const m2 = dateStr.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+  if (m2) {
+    const day = parseInt(m2[1], 10);
+    const month = parseInt(m2[2], 10);
+    const year = parseInt(m2[3], 10);
+    if (day < 1 || day > 31 || month < 1 || month > 12) return null;
+    return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+  }
+  return null;
 }
 
 function parseIndianAmount(s: string): number {
@@ -212,7 +240,9 @@ function parseIndianAmount(s: string): number {
 }
 
 function parseTransactionLine(line: string): ParsedTransaction | null {
-  const dm = line.match(FEDERAL_DATE_PREFIX);
+  // Try both date formats
+  let dm = line.match(FEDERAL_DATE_PREFIX);
+  if (!dm) dm = line.match(FEDERAL_DATE_PREFIX_SLASH);
   if (!dm) return null;
 
   const isoDate = parseFederalDate(dm[1]);
@@ -220,20 +250,45 @@ function parseTransactionLine(line: string): ParsedTransaction | null {
 
   const afterDates = line.slice(dm[0].length);
 
-  // pdfjs omits the empty withdrawal/deposit cell, so only 2 amounts appear:
-  // transaction amount + closing balance, followed by Cr/Dr (balance sign)
-  const tailMatch = afterDates.match(
+  // Try 3-amount format (email): withdrawal deposit balance CR/DR
+  // Withdrawal/deposit may be plain "0" without decimals
+  const tailMatch3 = afterDates.match(
+    /\s+([\d,]+(?:\.\d{2})?)\s+([\d,]+(?:\.\d{2})?)\s+([\d,]+\.\d{2})\s+(Cr|Dr)\s*$/i,
+  );
+  if (tailMatch3) {
+    const withdrawal = parseIndianAmount(tailMatch3[1]);
+    const deposit = parseIndianAmount(tailMatch3[2]);
+    const balance = parseIndianAmount(tailMatch3[3]);
+    const amount = withdrawal > 0 ? withdrawal : deposit;
+
+    const middle = afterDates
+      .slice(0, afterDates.length - tailMatch3[0].length)
+      .trim();
+    const refMatch = middle.match(/\b(S\d+)\b/i);
+    const referenceNumber = refMatch ? refMatch[1].toUpperCase() : "";
+
+    return {
+      date: isoDate,
+      description: cleanDescription(middle),
+      referenceNumber,
+      amount,
+      type: "debit", // placeholder — corrected in post-processing via balance comparison
+      balance,
+    };
+  }
+
+  // 2-amount format (app-downloaded): amount balance CR/DR
+  const tailMatch2 = afterDates.match(
     /\s+([\d,]+\.\d{2})\s+([\d,]+\.\d{2})\s+(Cr|Dr)\s*$/i,
   );
-  if (!tailMatch) return null;
+  if (!tailMatch2) return null;
 
-  const amount = parseIndianAmount(tailMatch[1]);
-  const balance = parseIndianAmount(tailMatch[2]);
+  const amount = parseIndianAmount(tailMatch2[1]);
+  const balance = parseIndianAmount(tailMatch2[2]);
 
   const middle = afterDates
-    .slice(0, afterDates.length - tailMatch[0].length)
+    .slice(0, afterDates.length - tailMatch2[0].length)
     .trim();
-
   const refMatch = middle.match(/\b(S\d+)\b/i);
   const referenceNumber = refMatch ? refMatch[1].toUpperCase() : "";
 
@@ -250,7 +305,7 @@ function parseTransactionLine(line: string): ParsedTransaction | null {
 /** e.g. "Opening Balance 2905.21 Cr" */
 function extractOpeningBalance(linesNearHeader: string[]): number | null {
   for (const line of linesNearHeader) {
-    const m = line.match(/opening\s+balance\s+([\d,]+\.\d{2})/i);
+    const m = line.match(/opening\s+balance\s+(?:[A-Z]+\s+)?([\d,]+\.\d{2})/i);
     if (m) return parseIndianAmount(m[1]);
   }
   return null;
@@ -277,6 +332,9 @@ function cleanDescription(desc: string): string {
 
 function isContinuationLine(line: string): boolean {
   if (FEDERAL_DATE_PREFIX.test(line)) return false;
+  if (FEDERAL_DATE_PREFIX_SLASH.test(line)) return false;
+  if (isHeaderLine(line)) return false;
+  if (isFooterLine(line)) return false;
   const matches = line.match(AMOUNT_TOKEN);
   if (matches && matches.length >= 2) return false;
   return true;
@@ -291,20 +349,33 @@ function isIgnorableRow(line: string): boolean {
     lower === "type details /cr" ||
     lower === "type details" ||
     lower === "/cr" ||
-    /^type\s+details/i.test(lower)
+    /^type\s+details/i.test(lower) ||
+    isHeaderLine(line) ||
+    lower.startsWith("statement of account") ||
+    lower.startsWith("savings account") ||
+    lower.startsWith("statement period") ||
+    lower.startsWith("customer name") ||
+    lower.startsWith("available balance") ||
+    lower.startsWith("customer id")
   );
 }
 
 function isFooterLine(line: string): boolean {
-  const lower = line.toLowerCase();
+  const lower = line.toLowerCase().trim();
   return (
     lower.includes("the federal bank ltd") ||
     lower.includes("federalbank.co.in") ||
+    lower.includes("federal.bank.in") ||
     lower.includes("federal towers") ||
-    /page\s+\d+\s+of\s+\d+/i.test(line) ||
+    /^page\s+\d+\s+of\s+\d+$/i.test(lower) ||
     lower.includes("abbreviations used") ||
     lower.includes("disclaimer") ||
-    lower.includes("this is a computer generated")
+    lower.includes("this is a computer generated") ||
+    lower === "24x7" ||
+    lower === "account statement" ||
+    lower === "." ||
+    /^contact@/i.test(lower) ||
+    /^\d{1,3}$/.test(lower)
   );
 }
 
@@ -351,11 +422,21 @@ function extractStatementPeriodFromAllLines(
 function matchStatementPeriodRange(
   text: string,
 ): { from: string; to: string } | null {
-  const m = text.match(
-    /period\s+(\d{4}-\d{2}-\d{2})\s+to\s+(\d{4}-\d{2}-\d{2})/i,
+  // YYYY-MM-DD format (app-downloaded)
+  const m1 = text.match(
+    /period[:\s]+(\d{4}-\d{2}-\d{2})\s+to\s+(\d{4}-\d{2}-\d{2})/i,
   );
-  if (m) {
-    return { from: m[1], to: m[2] };
+  if (m1) {
+    return { from: m1[1], to: m1[2] };
+  }
+  // DD/MM/YYYY format (email)
+  const m2 = text.match(
+    /period[:\s]+(\d{2}\/\d{2}\/\d{4})\s+to\s+(\d{2}\/\d{2}\/\d{4})/i,
+  );
+  if (m2) {
+    const from = parseFederalDate(m2[1]);
+    const to = parseFederalDate(m2[2]);
+    if (from && to) return { from, to };
   }
   return null;
 }
