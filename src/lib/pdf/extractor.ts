@@ -10,7 +10,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
 ).toString();
 
 const MAX_FILE_SIZE = 4 * 1024 * 1024; // 4MB
-const MAX_PAGES = 30;
+const MAX_PAGES = 90;
 
 /**
  * Extract text lines from a PDF file, optionally decrypting with a password.
