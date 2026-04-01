@@ -1,43 +1,45 @@
 import { NextResponse } from "next/server";
+import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { verifyOtp } from "@/lib/otp";
 
-const verifySchema = z.object({
+const resetPasswordSchema = z.object({
   email: z.string().email(),
   otp: z.string().length(6),
+  password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const parsed = verifySchema.safeParse(body);
+    const parsed = resetPasswordSchema.safeParse(body);
 
     if (!parsed.success) {
       return NextResponse.json(
-        { error: "Invalid request" },
+        { error: parsed.error.issues[0].message },
         { status: 400 },
       );
     }
 
-    const { email, otp } = parsed.data;
+    const { email, otp, password } = parsed.data;
     const normalizedEmail = email.toLowerCase();
 
     const token = await db.verificationToken.findFirst({
-      where: { email: normalizedEmail, type: "EMAIL_VERIFICATION" },
+      where: { email: normalizedEmail, type: "PASSWORD_RESET" },
       orderBy: { createdAt: "desc" },
     });
 
     if (!token) {
       return NextResponse.json(
-        { error: "No pending verification for this email" },
+        { error: "Invalid or expired reset code" },
         { status: 400 },
       );
     }
 
     if (token.expiresAt < new Date()) {
       return NextResponse.json(
-        { error: "Verification code has expired. Please request a new one." },
+        { error: "Reset code has expired. Please request a new one." },
         { status: 400 },
       );
     }
@@ -46,24 +48,25 @@ export async function POST(request: Request) {
 
     if (!isValid) {
       return NextResponse.json(
-        { error: "Invalid verification code" },
+        { error: "Invalid or expired reset code" },
         { status: 400 },
       );
     }
 
-    // Mark user as verified and clean up tokens
+    const hashedPassword = await bcrypt.hash(password, 12);
+
     await db.$transaction([
       db.user.update({
         where: { email: normalizedEmail },
-        data: { emailVerified: new Date() },
+        data: { hashedPassword },
       }),
       db.verificationToken.deleteMany({
-        where: { email: normalizedEmail, type: "EMAIL_VERIFICATION" },
+        where: { email: normalizedEmail, type: "PASSWORD_RESET" },
       }),
     ]);
 
     return NextResponse.json(
-      { message: "Email verified successfully", verified: true },
+      { message: "Password reset successfully", reset: true },
       { status: 200 },
     );
   } catch {

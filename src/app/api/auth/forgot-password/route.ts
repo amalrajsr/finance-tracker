@@ -2,42 +2,46 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { generateOtp, hashOtp, getOtpExpiryDate } from "@/lib/otp";
-import { sendOtpEmail } from "@/lib/email";
+import { sendPasswordResetEmail } from "@/lib/email";
 
 const COOLDOWN_SECONDS = 45;
 
-const resendSchema = z.object({
+const forgotPasswordSchema = z.object({
   email: z.string().email(),
 });
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const parsed = resendSchema.safeParse(body);
+    const parsed = forgotPasswordSchema.safeParse(body);
 
     if (!parsed.success) {
       return NextResponse.json(
-        { error: "Invalid request" },
+        { error: "Invalid email format" },
         { status: 400 },
       );
     }
 
     const normalizedEmail = parsed.data.email.toLowerCase();
 
+    // Always return same response to prevent email enumeration
+    const successResponse = NextResponse.json(
+      { message: "If an account exists, a reset code has been sent" },
+      { status: 200 },
+    );
+
     const user = await db.user.findUnique({
       where: { email: normalizedEmail },
     });
 
-    if (!user || user.emailVerified) {
-      return NextResponse.json(
-        { error: "No pending verification for this email" },
-        { status: 400 },
-      );
+    // Don't send reset email for non-existent or unverified users
+    if (!user || !user.emailVerified) {
+      return successResponse;
     }
 
-    // Check cooldown — last token must be older than COOLDOWN_SECONDS
+    // Check cooldown on last PASSWORD_RESET token
     const lastToken = await db.verificationToken.findFirst({
-      where: { email: normalizedEmail, type: "EMAIL_VERIFICATION" },
+      where: { email: normalizedEmail, type: "PASSWORD_RESET" },
       orderBy: { createdAt: "desc" },
     });
 
@@ -46,15 +50,15 @@ export async function POST(request: Request) {
       if (elapsed < COOLDOWN_SECONDS) {
         const retryAfter = Math.ceil(COOLDOWN_SECONDS - elapsed);
         return NextResponse.json(
-          { error: "Please wait before requesting a new code", retryAfter },
+          { error: "Please wait before requesting another code", retryAfter },
           { status: 429 },
         );
       }
     }
 
-    // Delete old tokens and create new one
+    // Delete old PASSWORD_RESET tokens and create new one
     await db.verificationToken.deleteMany({
-      where: { email: normalizedEmail, type: "EMAIL_VERIFICATION" },
+      where: { email: normalizedEmail, type: "PASSWORD_RESET" },
     });
 
     const otp = generateOtp();
@@ -64,17 +68,14 @@ export async function POST(request: Request) {
       data: {
         email: normalizedEmail,
         token: hashedToken,
-        type: "EMAIL_VERIFICATION",
+        type: "PASSWORD_RESET",
         expiresAt: getOtpExpiryDate(),
       },
     });
 
-    await sendOtpEmail(normalizedEmail, otp);
+    await sendPasswordResetEmail(normalizedEmail, otp);
 
-    return NextResponse.json(
-      { message: "Verification code sent", sent: true },
-      { status: 200 },
-    );
+    return successResponse;
   } catch {
     return NextResponse.json(
       { error: "Something went wrong. Please try again." },
