@@ -4,9 +4,10 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
-import { OtpInput } from "./otp-input";
-import { ResendButton } from "./resend-button";
+import { OtpInput } from "../../_components/otp-input";
+import { ResendButton } from "../../_components/resend-button";
 import { useVerifyEmail } from "../_services/use-verify-email";
+import { useResendOtp } from "../_services/use-resend-otp";
 
 interface VerifyEmailFormProps {
   email: string;
@@ -21,6 +22,7 @@ export function VerifyEmailForm({ email, password }: VerifyEmailFormProps) {
     isPending,
     error: mutationError,
   } = useVerifyEmail();
+  const { mutateAsync: resend, isPending: isResending } = useResendOtp();
 
   async function handleVerify() {
     try {
@@ -83,7 +85,12 @@ export function VerifyEmailForm({ email, password }: VerifyEmailFormProps) {
       </Button>
 
       <div className="text-center">
-        <ResendButton email={email} />
+        <ResendButton
+          email={email}
+          onResend={(e) => resend({ email: e })}
+          isPending={isResending}
+          successMessage="Verification code sent"
+        />
       </div>
     </div>
   );

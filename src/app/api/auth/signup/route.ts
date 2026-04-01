@@ -39,7 +39,7 @@ export async function POST(request: Request) {
     // Delete unverified user and their tokens if re-registering
     if (existingUser && !existingUser.emailVerified) {
       await db.verificationToken.deleteMany({
-        where: { email: normalizedEmail },
+        where: { email: normalizedEmail, type: "EMAIL_VERIFICATION" },
       });
       await db.user.delete({ where: { id: existingUser.id } });
     }
@@ -61,6 +61,7 @@ export async function POST(request: Request) {
       data: {
         email: normalizedEmail,
         token: hashedToken,
+        type: "EMAIL_VERIFICATION",
         expiresAt: getOtpExpiryDate(),
       },
     });

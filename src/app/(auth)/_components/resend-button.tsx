@@ -2,29 +2,35 @@
 
 import { useEffect } from "react";
 import { useCountdown } from "@/hooks/use-countdown";
-import { useResendOtp } from "../_services/use-resend-otp";
 import { useToast } from "@/hooks/use-toast";
 
 interface ResendButtonProps {
   email: string;
+  onResend: (email: string) => Promise<unknown>;
+  isPending: boolean;
+  successMessage?: string;
 }
 
 const COOLDOWN_SECONDS = 45;
 
-export function ResendButton({ email }: ResendButtonProps) {
+export function ResendButton({
+  email,
+  onResend,
+  isPending,
+  successMessage = "Code sent",
+}: ResendButtonProps) {
   const { secondsLeft, isActive, start } = useCountdown(COOLDOWN_SECONDS);
   const { toast } = useToast();
-  const { mutateAsync: resend, isPending } = useResendOtp();
 
-  // Start cooldown on mount (OTP was just sent during signup)
+  // Start cooldown on mount (code was just sent)
   useEffect(() => {
     start();
   }, [start]);
 
   async function handleResend() {
     try {
-      await resend({ email });
-      toast("Verification code sent", "success");
+      await onResend(email);
+      toast(successMessage, "success");
       start();
     } catch (err) {
       const error = err as Error & { retryAfter?: number };

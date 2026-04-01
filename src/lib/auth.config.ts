@@ -28,7 +28,9 @@ export default {
       const isAuthRoute =
         nextUrl.pathname.startsWith("/login") ||
         nextUrl.pathname.startsWith("/signup") ||
-        nextUrl.pathname.startsWith("/verify-email");
+        nextUrl.pathname.startsWith("/verify-email") ||
+        nextUrl.pathname.startsWith("/forgot-password") ||
+        nextUrl.pathname.startsWith("/reset-password");
 
       if (isOnDashboard) {
         return isLoggedIn;
