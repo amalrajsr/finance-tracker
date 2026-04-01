@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npx prisma:*)"
+      "Bash(npx prisma:*)",
+      "Bash(find /d/personal_projects/fn-tracker/public -type f -exec ls -lh {} \\\\;)"
     ]
   }
 }
