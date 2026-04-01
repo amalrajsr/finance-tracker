@@ -1,14 +1,11 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { CategoryBadge } from "./CategoryBadge";
-import type { CategoryBadgeProps } from "./CategoryBadge";
+import { CategoryBadge } from "@/components/common/category-badge";
+import type { CategoryBadgeProps, CategoryOption } from "@/components/common/category-badge";
+export type { CategoryOption };
 import { useToast } from "@/hooks/use-toast";
 import { BottomSheet } from "@/components/ui/bottom-sheet";
-
-export interface CategoryOption extends CategoryBadgeProps {
-  id: string;
-}
 
 interface CategorySelectProps {
   transactionId: string;

@@ -205,6 +205,8 @@ export async function GET(req: NextRequest) {
         balance: true,
         createdAt: true,
         categoryId: true,
+        manualCategory: true,
+        isManual: true,
         category: {
           select: {
             slug: true,
@@ -220,16 +222,19 @@ export async function GET(req: NextRequest) {
 
   return NextResponse.json({
     transactions: transactions.map((t) => ({
-      ...t,
-      amount: t.amount.toString(),
-      balance: t.balance.toString(),
+      id: t.id,
       date: t.date.toISOString(),
-      createdAt: t.createdAt.toISOString(),
+      description: t.description,
+      reference: t.reference,
+      amount: t.amount.toString(),
+      type: t.type,
+      balance: t.balance.toString(),
+      manualCategory: t.manualCategory,
+      isManual: t.isManual,
       categorySlug: t.category?.slug,
       categoryName: t.category?.name,
       categoryColour: t.category?.colour,
       categoryIcon: t.category?.icon,
-      category: undefined, // remove nested object
     })),
     total,
     page,

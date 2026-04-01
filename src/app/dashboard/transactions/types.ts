@@ -1,6 +1,6 @@
 import { CategoryOption } from "./_components/CategorySelect";
 
-export type SerializedTransaction = {
+export interface SerializedTransaction {
   id: string;
   date: string;
   description: string;
@@ -15,4 +15,11 @@ export type SerializedTransaction = {
   manualCategory: boolean;
   isManual: boolean;
   categories: CategoryOption[];
-};
+}
+
+export interface TransactionsApiResponse {
+  transactions: Omit<SerializedTransaction, "categories">[];
+  total: number;
+  page: number;
+  totalPages: number;
+}
