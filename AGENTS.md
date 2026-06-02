@@ -162,3 +162,26 @@ There is no test suite. If adding tests, prefer integration tests that hit a rea
 - For all web browsing, use the `/browse` skill from gstack.
 - Never use `mcp__claude-in-chrome__*` tools.
 - Available gstack skills: `/office-hours`, `/plan-ceo-review`, `/plan-eng-review`, `/plan-design-review`, `/design-consultation`, `/design-shotgun`, `/design-html`, `/review`, `/ship`, `/land-and-deploy`, `/canary`, `/benchmark`, `/browse`, `/connect-chrome`, `/qa`, `/qa-only`, `/design-review`, `/setup-browser-cookies`, `/setup-deploy`, `/setup-gbrain`, `/retro`, `/investigate`, `/document-release`, `/codex`, `/cso`, `/autoplan`, `/plan-devex-review`, `/devex-review`, `/careful`, `/freeze`, `/guard`, `/unfreeze`, `/gstack-upgrade`, `/learn`.
+
+## graphify
+You have access to a Graphify knowledge graph at:
+`D:\personal_projects\fn-tracker\graphify-out`
+
+For codebase questions, architecture questions, or "where does this live?" questions:
+
+1. First run:
+   `graphify query "<user question>" --graph "D:\personal_projects\fn-tracker\graphify-out\graph.json"`
+2. If the question is about a specific symbol or concept, prefer:
+   `graphify explain "<symbol or concept>" --graph "D:\personal_projects\fn-tracker\graphify-out\graph.json"`
+3. If the question is about how two things connect, prefer:
+   `graphify path "<node A>" "<node B>" --graph "D:\personal_projects\fn-tracker\graphify-out\graph.json"`
+4. Use the graph result first. Only read specific files when the graph output is insufficient or you need exact implementation detail.
+
+Rules:
+- Do not scan the whole repo before checking the graph.
+- Do not load full files unless the graph points you there or the task requires exact code edits.
+- Prefer graph relationships, bridge nodes, and shortest paths when explaining architecture.
+- Cite the source files surfaced by graphify when possible.
+- After significant code changes, refresh the graph with:
+  `graphify update .`
+- If documentation/images need semantic extraction, run a full `/graphify .` flow from the agent instead of relying on `graphify update .`.

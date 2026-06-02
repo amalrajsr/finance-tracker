@@ -1,0 +1,642 @@
+{
+  "D:\\personal_projects\\fn-tracker\\src\\app\\(auth)\\_components\\auth-brand-panel.tsx": {
+    "mtime": 1775030627.3779795,
+    "ast_hash": "b7b9ecf36d1f316db868f76078f1a5d3",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\(auth)\\_components\\otp-input.tsx": {
+    "mtime": 1775030627.378972,
+    "ast_hash": "6170a137d0b548788b4a0181d215d606",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\(auth)\\_components\\resend-button.tsx": {
+    "mtime": 1775030627.378972,
+    "ast_hash": "0cddfabe01d16b2379b0122a49789a57",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\(auth)\\forgot-password\\page.tsx": {
+    "mtime": 1775030627.3819695,
+    "ast_hash": "a0d4d318bc751f95f531b1ca0556a536",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\(auth)\\layout.tsx": {
+    "mtime": 1774949640.1480443,
+    "ast_hash": "016d2470d5a6bc5b9ae19b7cef23c424",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\(auth)\\login\\_services\\use-login.ts": {
+    "mtime": 1774949640.150049,
+    "ast_hash": "747f111ac07ffe780c42fd34dd90859b",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\(auth)\\login\\page.tsx": {
+    "mtime": 1775030627.3829672,
+    "ast_hash": "8a319b21d0d9e415336009a2165fd5e5",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\(auth)\\reset-password\\_services\\use-resend-reset-otp.ts": {
+    "mtime": 1775030627.385967,
+    "ast_hash": "77b984b9339b95269a772267fea015aa",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\(auth)\\reset-password\\page.tsx": {
+    "mtime": 1775030627.3879685,
+    "ast_hash": "c054afeee0ba098044cdf11d0794f1fc",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\(auth)\\signup\\_services\\use-signup.ts": {
+    "mtime": 1774949640.1520474,
+    "ast_hash": "02c9b855cdf999e554ed8a727d86a2b4",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\(auth)\\signup\\page.tsx": {
+    "mtime": 1775030627.3889678,
+    "ast_hash": "1a52822151f85d90aaec33a52b7febd8",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\(auth)\\verify-email\\_components\\verify-email-form.tsx": {
+    "mtime": 1775030627.389969,
+    "ast_hash": "389c660b29f0f6431761e54325b0c726",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\(auth)\\verify-email\\_services\\use-resend-otp.ts": {
+    "mtime": 1774949640.159045,
+    "ast_hash": "38420580b61953ae9221c268f352e22e",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\(auth)\\verify-email\\_services\\use-verify-email.ts": {
+    "mtime": 1774949640.1600442,
+    "ast_hash": "aee36bb7d3677b63ce8b98a3cbcc9238",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\(auth)\\verify-email\\page.tsx": {
+    "mtime": 1774949640.166044,
+    "ast_hash": "3af9910e53eac233641b762d6bec4ddb",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\api\\analytics\\summary\\route.ts": {
+    "mtime": 1774949640.1680439,
+    "ast_hash": "6d735543f2bdcf4cae06b3e8c29c3f60",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\api\\auth\\[...nextauth]\\route.ts": {
+    "mtime": 1771262917.173746,
+    "ast_hash": "c4ef21a64836d4188f49ffa26a78906d",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\api\\auth\\forgot-password\\route.ts": {
+    "mtime": 1775030627.3909693,
+    "ast_hash": "9c81da0e1219a14d8331c4d98cd35beb",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\api\\auth\\resend-otp\\route.ts": {
+    "mtime": 1775030627.3919694,
+    "ast_hash": "f5c23ee42835847476de061b1d1000d8",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\api\\auth\\reset-password\\route.ts": {
+    "mtime": 1775030627.392988,
+    "ast_hash": "664f2b015f12bdb1a136862e80b6391e",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\api\\auth\\signup\\route.ts": {
+    "mtime": 1775030627.3939645,
+    "ast_hash": "0dc9dd59ee760910d9aa718c9323df11",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\api\\auth\\verify-email\\route.ts": {
+    "mtime": 1775030627.3959675,
+    "ast_hash": "bea1285bd59f1b4354291d7519f5499d",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\api\\calendar\\daily-totals\\route.ts": {
+    "mtime": 1775063386.418817,
+    "ast_hash": "aee7342ee3f433592797e96f13fcfcfe",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\api\\settings\\account\\route.ts": {
+    "mtime": 1774949640.181044,
+    "ast_hash": "29a741cafb781c70e99e3a83971d53fe",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\api\\settings\\data\\route.ts": {
+    "mtime": 1774949640.1820438,
+    "ast_hash": "b377a8f049f6f65f6439983f0ddadb1c",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\api\\settings\\password\\route.ts": {
+    "mtime": 1774949640.1840484,
+    "ast_hash": "dfa8563d33017073bc71966e970cd5d6",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\api\\settings\\profile\\route.ts": {
+    "mtime": 1774949640.1850452,
+    "ast_hash": "9b306a8d025bad54b97b10964bcd4d4e",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\api\\transactions\\[id]\\route.ts": {
+    "mtime": 1774949640.1870468,
+    "ast_hash": "2bb84502431ac531858d86a77b47cea6",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\api\\transactions\\backfill\\route.ts": {
+    "mtime": 1774949640.1890452,
+    "ast_hash": "3764bf61c4a20a42cd27ed1230ad23b5",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\api\\transactions\\manual\\[id]\\route.ts": {
+    "mtime": 1774949640.1910472,
+    "ast_hash": "307ae2ff69a921f143e04476ca7d901d",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\api\\transactions\\manual\\route.ts": {
+    "mtime": 1774949640.1930444,
+    "ast_hash": "299808beb8e50b656b5798b8232c8fa4",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\api\\transactions\\route.ts": {
+    "mtime": 1775063386.4198172,
+    "ast_hash": "28c5f1504a225dca523e1201087e9f5d",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\_components\\BackfillBanner.tsx": {
+    "mtime": 1774949640.1960442,
+    "ast_hash": "9c978c09821430f7c3e7ef446acbf3bc",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\_components\\Charts.tsx": {
+    "mtime": 1776763339.7391162,
+    "ast_hash": "5a2cf9ddf58429c645b9015bb38b77c2",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\_components\\DashboardQuickActions.tsx": {
+    "mtime": 1775063386.420818,
+    "ast_hash": "041813871d95bc490b37259f485e7cf0",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\calendar\\_components\\calendar-day-cell.tsx": {
+    "mtime": 1775063386.4218192,
+    "ast_hash": "981c4ce344a8d249187beeefe5260212",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\calendar\\_components\\calendar-grid.tsx": {
+    "mtime": 1775063386.4228187,
+    "ast_hash": "1999330d8d9c363c3a888363d5dc705b",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\calendar\\_components\\calendar-header.tsx": {
+    "mtime": 1775063386.4228187,
+    "ast_hash": "ae6c6bd23c0160e640712e26583f8d14",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\calendar\\_components\\calendar-view.tsx": {
+    "mtime": 1775063386.4238183,
+    "ast_hash": "1e75f3f1380e8c3b746c2fef5acaf986",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\calendar\\_components\\day-transaction-item.tsx": {
+    "mtime": 1776763339.7391162,
+    "ast_hash": "52729ac7bd24296a39f0e7074d62e79b",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\calendar\\_components\\day-transaction-list.tsx": {
+    "mtime": 1775063386.424818,
+    "ast_hash": "17b349eb8f557394e55298c6b81c281c",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\calendar\\_components\\day-transaction-sheet.tsx": {
+    "mtime": 1775063386.4258206,
+    "ast_hash": "7c7def337fb737520a23f543b479d6e8",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\calendar\\_hooks\\use-calendar-data.ts": {
+    "mtime": 1775063386.4268205,
+    "ast_hash": "c9302ce32a31474869e30ebc12400b92",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\calendar\\_hooks\\use-calendar-navigation.ts": {
+    "mtime": 1775063386.4268205,
+    "ast_hash": "5afd166dbdf0ceadee9670a521913aab",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\calendar\\_hooks\\use-day-transactions.ts": {
+    "mtime": 1775063386.427818,
+    "ast_hash": "ecc129c3e741f848ae81f26840360624",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\calendar\\_utils\\calendar-helpers.ts": {
+    "mtime": 1775063386.4288173,
+    "ast_hash": "f56ad4962fd5d5afc23e80cc0e2d8752",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\calendar\\page.tsx": {
+    "mtime": 1775063386.4298308,
+    "ast_hash": "c07affad00387d1236bc9e3a9a1d3299",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\calendar\\types.ts": {
+    "mtime": 1775063386.4308255,
+    "ast_hash": "4bb198c313f6934a5f18d1e25c8c2219",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\layout.tsx": {
+    "mtime": 1774949640.1990447,
+    "ast_hash": "f9c1e23f56e28cfef7e10ac6cf3b64d0",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\page.tsx": {
+    "mtime": 1776763339.741118,
+    "ast_hash": "e99aca773727f087073414b050bbadf2",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\settings\\_components\\ChangePasswordSection.tsx": {
+    "mtime": 1774949640.227045,
+    "ast_hash": "ee3cabc977de4570ab485ad7dd676859",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\settings\\_components\\ConfirmationModal.tsx": {
+    "mtime": 1774949640.228046,
+    "ast_hash": "41d5289d4c2ed2c7c8f04816e7cfb05a",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\settings\\_components\\DangerZone.tsx": {
+    "mtime": 1774949640.2290437,
+    "ast_hash": "77a52f083bb32feecd63b2bd7b50ba52",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\settings\\_components\\ProfileSection.tsx": {
+    "mtime": 1774949640.230045,
+    "ast_hash": "615f979c6255d68ab757546aa0bf1744",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\settings\\_services\\use-clear-data.ts": {
+    "mtime": 1774949640.233045,
+    "ast_hash": "1351631e4ab6afe200336962ddbb4e22",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\settings\\_services\\use-delete-account.ts": {
+    "mtime": 1774949640.234048,
+    "ast_hash": "83b9649357742bcaa676ed2b8bc25a14",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\settings\\_services\\use-profile.ts": {
+    "mtime": 1774949640.2350438,
+    "ast_hash": "5fb20d3aebaac0cd8b15c1de1ecad7f9",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\settings\\page.tsx": {
+    "mtime": 1774949640.2360446,
+    "ast_hash": "c4f7d4bb454ef03dc0341a358351da27",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\transactions\\_components\\CategoryBadge.tsx": {
+    "mtime": 1775063386.433819,
+    "ast_hash": "1893ef41a5e8954d45feab6e0609d142",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\transactions\\_components\\CategoryDropdown.tsx": {
+    "mtime": 1775063386.43482,
+    "ast_hash": "d8f51414894ec537e829b5c98655a3b4",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\transactions\\_components\\CategorySelect.tsx": {
+    "mtime": 1775063386.435817,
+    "ast_hash": "5cdef58db319d00be1a99cc697600d03",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\transactions\\_components\\EmptyState.tsx": {
+    "mtime": 1774949640.2410457,
+    "ast_hash": "737611deed9cc937e378098237cddbb3",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\transactions\\_components\\ManualTransactionActions.tsx": {
+    "mtime": 1774949640.2410457,
+    "ast_hash": "8673c8d20f5bfc124f60d131a9706b48",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\transactions\\_components\\MobileCard.tsx": {
+    "mtime": 1776763339.7421155,
+    "ast_hash": "b175ddb84d6aa54d66f99f532a69bd56",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\transactions\\_components\\NoFilterResults.tsx": {
+    "mtime": 1774949640.2440467,
+    "ast_hash": "c94d1201d51de3e3674e65760e13eafb",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\transactions\\_components\\TableRow.tsx": {
+    "mtime": 1776763339.7431135,
+    "ast_hash": "b5dc7edc6e6438622e31137fba1e1845",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\transactions\\_components\\TransactionFilters.tsx": {
+    "mtime": 1774949640.2460475,
+    "ast_hash": "afd3010702e2b194bb5fec00d368669b",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\transactions\\_components\\TransactionForm.tsx": {
+    "mtime": 1775063386.4368196,
+    "ast_hash": "497289780e9f287aedc27d83b3808fd9",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\transactions\\_components\\TransactionList.tsx": {
+    "mtime": 1776763339.7441485,
+    "ast_hash": "81bbeef457c2caf6ce5b2910fe76f721",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\transactions\\_components\\TransactionModal.tsx": {
+    "mtime": 1775063386.4378211,
+    "ast_hash": "80c9de1e6594505656e2c010f5e0d1c1",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\transactions\\_components\\TransactionPageHeader.tsx": {
+    "mtime": 1774949640.2530465,
+    "ast_hash": "f63ea54bc736eb40e68ec2f46f2749f3",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\transactions\\_hooks\\use-manual-transaction.ts": {
+    "mtime": 1775063386.4388204,
+    "ast_hash": "7f1bd09b8f5b765f11aba0ac4e0de45f",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\transactions\\_hooks\\use-transactions.ts": {
+    "mtime": 1775063386.4398165,
+    "ast_hash": "1e32ad9d9d086fc05936a018b8690303",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\transactions\\_utils\\transaction-form.schema.ts": {
+    "mtime": 1775063386.4398165,
+    "ast_hash": "03dd1658a64b94be3dd769d261e557fb",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\transactions\\page.tsx": {
+    "mtime": 1775063386.440817,
+    "ast_hash": "b3b17395ac161d22c876b360bf90c34f",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\transactions\\types.ts": {
+    "mtime": 1775063386.442824,
+    "ast_hash": "f6f709e7e075bb2ace1ea6abe46b2bb3",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\upload\\_components\\DropZone.tsx": {
+    "mtime": 1774949640.259043,
+    "ast_hash": "09932076bc5b08d401921f484f7f9f10",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\upload\\_components\\ParsingProgress.tsx": {
+    "mtime": 1774949640.2600453,
+    "ast_hash": "113a8f1496687843243500894795d5db",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\upload\\_components\\PasswordInput.tsx": {
+    "mtime": 1775063386.443819,
+    "ast_hash": "690f732651b3971e906510856d341542",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\upload\\_components\\TransactionPreview.tsx": {
+    "mtime": 1774949640.2620454,
+    "ast_hash": "ba2a62cb41101cf8cf0d82c6abf86905",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\dashboard\\upload\\page.tsx": {
+    "mtime": 1774949640.2720473,
+    "ast_hash": "e5867ad712905af0e3e694dcb056a34a",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\layout.tsx": {
+    "mtime": 1776763339.7461152,
+    "ast_hash": "8a7ae527f7a3a160d8b430fbff5d0640",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\manifest.ts": {
+    "mtime": 1775030627.4009657,
+    "ast_hash": "82a5f370501362cf4807d136245f763c",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\offline\\page.tsx": {
+    "mtime": 1775030627.4019718,
+    "ast_hash": "bd1c8c28c91f865d14904ccbcefc588e",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\page.tsx": {
+    "mtime": 1771262961.4099581,
+    "ast_hash": "1f284a84f72684a6c95f5f3fac76f06f",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\sw.ts": {
+    "mtime": 1775030627.4029691,
+    "ast_hash": "99a7097c6fe7667443ad07f462e2c5bf",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\components\\auth\\auth-theme-toggle.tsx": {
+    "mtime": 1774949640.284046,
+    "ast_hash": "d7729891292817ed84f7a6e29dfd024f",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\components\\common\\category-badge.tsx": {
+    "mtime": 1775063386.4448178,
+    "ast_hash": "4549af539e2b5e8c3caf0bd19a75b307",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\components\\common\\category-dropdown.tsx": {
+    "mtime": 1775063386.4458184,
+    "ast_hash": "2fb8c14261ad4a2340d488e0d2ca59c3",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\components\\common\\transaction-form.tsx": {
+    "mtime": 1775063386.4468195,
+    "ast_hash": "5d9da1d0f0325b77c9c74fc01b43ca38",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\components\\layout\\AppShell.tsx": {
+    "mtime": 1776763339.7471144,
+    "ast_hash": "5cce852b8db9db9ee59a7ce7d77cd6d8",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\components\\providers\\query-provider.tsx": {
+    "mtime": 1774949640.2880464,
+    "ast_hash": "ec7cf7d00d4a06f4b4a812438fb01161",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\components\\providers\\theme-provider.tsx": {
+    "mtime": 1774949640.2890468,
+    "ast_hash": "02ad390e0a9be049c3a1a5bb0c2b640d",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\components\\ui\\bottom-sheet.tsx": {
+    "mtime": 1774949640.2910461,
+    "ast_hash": "1f6d6d8f4afd6a2ad98bd5d3ed43fddd",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\components\\ui\\button.tsx": {
+    "mtime": 1776763339.7481146,
+    "ast_hash": "14812eb3ed59f16208f2ab58e6d1c023",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\components\\ui\\calendar.tsx": {
+    "mtime": 1774949640.2940464,
+    "ast_hash": "92fbc21d0019733cdc5bade940c072eb",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\components\\ui\\date-picker.tsx": {
+    "mtime": 1774949640.2950456,
+    "ast_hash": "394afea54f516ed29f7ca56ea3cf2ff6",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\components\\ui\\input-otp.tsx": {
+    "mtime": 1774949640.296049,
+    "ast_hash": "baba2b71230f20f7e3b32c8fd2d629c4",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\components\\ui\\input.tsx": {
+    "mtime": 1776763339.7491126,
+    "ast_hash": "9b98a4942a5e8157adcecb714f5a3009",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\components\\ui\\modal.tsx": {
+    "mtime": 1775063386.4478178,
+    "ast_hash": "e466a4dd4d4caaa83d3a3044e9839984",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\components\\ui\\native-select.tsx": {
+    "mtime": 1774949640.299046,
+    "ast_hash": "81ac1708001c2bc5e2da019f51874b07",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\components\\ui\\popover.tsx": {
+    "mtime": 1774949640.3010464,
+    "ast_hash": "f4581d52d39b76ae56cf76c1e602fd9c",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\components\\ui\\select.tsx": {
+    "mtime": 1776763339.7501173,
+    "ast_hash": "fc7d964889fe17cca9fc412266dba5d1",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\hooks\\use-countdown.ts": {
+    "mtime": 1774949640.3040464,
+    "ast_hash": "c87de59170d5813c1fc5ae93eef55913",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\hooks\\use-manual-transaction.ts": {
+    "mtime": 1775063386.4488156,
+    "ast_hash": "98e3896b878a99b3d09e055e13fba4e2",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\hooks\\use-swipe.tsx": {
+    "mtime": 1774949640.305045,
+    "ast_hash": "021bf559926e099d43f2201b40b73e67",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\hooks\\use-toast.tsx": {
+    "mtime": 1774949640.3060453,
+    "ast_hash": "cd34a8902862aeb3bc656da1deb4b52b",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\lib\\analytics.ts": {
+    "mtime": 1774949640.3070455,
+    "ast_hash": "afab70682c28be5bbc9df85fb59cbace",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\lib\\auth.config.ts": {
+    "mtime": 1775030627.4039702,
+    "ast_hash": "91c6b9d8824621d9cc62d43e8cb43ec8",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\lib\\auth.ts": {
+    "mtime": 1774949640.3100464,
+    "ast_hash": "8a21dff4209f8cbf54dbd46b5988b387",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\lib\\categorization\\engine.ts": {
+    "mtime": 1774949640.3120484,
+    "ast_hash": "921be3454080f418bcbd9eeab1623737",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\lib\\categorization\\merchantExtractor.ts": {
+    "mtime": 1774949640.313046,
+    "ast_hash": "6d46e30c36cc6e3d869ca6e46c3a96fb",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\lib\\categorization\\rules.ts": {
+    "mtime": 1774949640.317045,
+    "ast_hash": "29eb820f303f3b532dec3f2d7001564b",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\lib\\db.ts": {
+    "mtime": 1774949640.3200467,
+    "ast_hash": "03869654eb0968d40924e1d85e5abe36",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\lib\\email.ts": {
+    "mtime": 1775030627.4049654,
+    "ast_hash": "5065d3d2e421748f10912156691c9273",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\lib\\format.ts": {
+    "mtime": 1774949640.3230443,
+    "ast_hash": "b08902a23ba47605e256fd9eacf3840b",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\lib\\otp.ts": {
+    "mtime": 1774949640.3240452,
+    "ast_hash": "7848d176155d9e5cc933b0b4ae6b6ad2",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\lib\\pdf\\banks\\federal.ts": {
+    "mtime": 1774949640.3260472,
+    "ast_hash": "9fcb03cd00b8d9a779557b34ab744497",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\lib\\pdf\\banks\\hdfc.ts": {
+    "mtime": 1774949640.3280458,
+    "ast_hash": "60f4d745734c839135d8e66ae6b9bc9d",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\lib\\pdf\\extractor.ts": {
+    "mtime": 1775063386.4508183,
+    "ast_hash": "2e7a508ceba0671f835f290b8d47958d",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\lib\\pdf\\parser-registry.ts": {
+    "mtime": 1774949640.3300445,
+    "ast_hash": "796e9ecad6e4f59e3dad080fbddd9b90",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\lib\\pdf\\types.ts": {
+    "mtime": 1774949640.333044,
+    "ast_hash": "9fd710b58f921904a7cd1bdcc22df8e2",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\lib\\schemas\\transaction-form.schema.ts": {
+    "mtime": 1775063386.4518201,
+    "ast_hash": "cda99481d95e67f6255d7016c5332009",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\lib\\utils.ts": {
+    "mtime": 1774949640.334044,
+    "ast_hash": "1d8011eb18769078bf77502b220daa5e",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\proxy.ts": {
+    "mtime": 1774949640.3360465,
+    "ast_hash": "a9ce63229d6130d79f71f53516ca885b",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\types\\next-auth.d.ts": {
+    "mtime": 1774949640.3380444,
+    "ast_hash": "c600b4997f8a957d392355b24d7833de",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\apple-icon.png": {
+    "mtime": 1775030627.396969,
+    "ast_hash": "da0473c8d9e6e915aa7ab0fb9a6bcc42",
+    "semantic_hash": ""
+  },
+  "D:\\personal_projects\\fn-tracker\\src\\app\\icon.png": {
+    "mtime": 1775030627.39897,
+    "ast_hash": "da0473c8d9e6e915aa7ab0fb9a6bcc42",
+    "semantic_hash": ""
+  }
+}
